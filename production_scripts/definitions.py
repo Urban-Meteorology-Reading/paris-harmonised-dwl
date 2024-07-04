@@ -4,6 +4,10 @@ Created on Thu Jul  4 14:01:52 2024
 
 @author: willm
 """
+# output directory definitions
+L1_BASEDIR = "D:/Urbisphere/sandbox/data/L1/by-serialnr/France/Paris/"
+L2_BASEDIR = "D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/"
+L3_BASEDIR = "D:/urbisphere/sandbox/data/L3/by-instrumentmodel/DWL/"
 
 # some label defs
 WS_UNITS = "m.s^-1"
@@ -14,13 +18,8 @@ RANGE_MIN = 0
 RANGE_MAX = 5000
 RANGE_RES = 25
 
-# maximum valid wind speed m/s for QC
+# maximum valid wind speed m/s for all QC
 MAX_VALID_WS = 60
-
-# output directory definitions
-L1_BASEDIR = "D:/Urbisphere/sandbox/data/L1/by-serialnr/France/Paris/"
-L2_BASEDIR = "D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/"
-L3_BASEDIR = "D:/urbisphere/sandbox/data/L3/by-instrumentmodel/DWL/"
 
 # template for file names
 PRODUCT_FILENAME_TEMPLATE = (
