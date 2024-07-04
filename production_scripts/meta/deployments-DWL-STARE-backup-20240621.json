@@ -1,0 +1,119 @@
+[
+    {
+        "instrument":{
+            "serial":"30"
+        },
+        "raw_file": {
+            "datetime_pattern": "Stare_{instrument_serial}_%Y%m%d_%H.hpl",
+            "type": "Stare"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"03"
+        },
+        "raw_file": {
+            "datetime_pattern": "Stare_{instrument_serial}_%Y%m%d_%H.hpl",
+            "type": "Stare"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"26"
+        },
+        "raw_file": {
+            "datetime_pattern": "Stare_{instrument_serial}_%Y%m%d_%H.hpl",
+            "type": "Stare"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"156"
+        },
+        "raw_file": {
+            "datetime_pattern": "Stare_{instrument_serial}_%Y%m%d_%H.hpl",
+            "type": "Stare"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"175"
+        },
+        "raw_file": {
+            "datetime_pattern": "Stare_{instrument_serial}_%Y%m%d_%H.hpl",
+            "type": "Stare"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"204"
+        },
+        "raw_file": {
+            "datetime_pattern": "Stare_{instrument_serial}_%Y%m%d_%H.hpl",
+            "type": "Stare"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"03"
+        },
+        "raw_file": {
+            "datetime_pattern": "User5_{instrument_serial}_%Y%m%d_%H%M%S.hpl",
+            "type": "WIND"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"30"
+        },
+        "raw_file": {
+            "datetime_pattern": "VAD_{instrument_serial}_%Y%m%d_%H%M%S.hpl",
+            "type": "WIND"
+        },
+        "options": {
+            "azimuth_offset": -5
+        }
+    },
+    {
+        "instrument":{
+            "serial":"26"
+        },
+        "raw_file": {
+            "datetime_pattern": "User5_{instrument_serial}_%Y%m%d_%H%M%S.hpl",
+            "type": "WIND"
+        },
+        "options": {
+            "azimuth_offset": -2
+        }
+    },
+    {
+        "instrument":{
+            "serial":"156"
+        },
+        "raw_file": {
+            "datetime_pattern": "User5_{instrument_serial}_%Y%m%d_%H%M%S.hpl",
+            "type": "WIND"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"175"
+        },
+        "raw_file": {
+            "datetime_pattern": "User5_{instrument_serial}_%Y%m%d_%H%M%S.hpl",
+            "type": "WIND"
+        },
+        "options": {
+            "azimuth_offset": 4.5
+        }
+    },
+    {
+        "instrument":{
+            "serial":"204"
+        },
+        "raw_file": {
+            "datetime_pattern": "User5_{instrument_serial}_%Y%m%d_%H%M%S.hpl",
+            "type": "WIND"
+        }
+    }
+]

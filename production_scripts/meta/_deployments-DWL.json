@@ -1,0 +1,98 @@
+[
+    {
+        "instrument":{
+            "serial":"26"
+        },
+        "raw_file": {
+            "datetime_pattern": "Stare_{instrument_serial}_%Y%m%d_%H.hpl",
+            "product": "Stare",
+        },
+        "site": {
+            "code": "LUPD"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"204"
+        },
+        "raw_file": {
+            "datetime_pattern": "Stare_{instrument_serial}_%Y%m%d_%H.hpl",
+            "product": "Stare",
+        },
+        "site": {
+            "code": "ARBO"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"175"
+        },
+        "raw_file": {
+            "datetime_pattern": "Stare_{instrument_serial}_%Y%m%d_%H.hpl",
+            "product": "Stare",
+        },
+        "site": {
+            "code": "CHEM"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"26"
+        },
+        "raw_file": {
+            "datetime_pattern": "User5_{instrument_serial}_%Y%m%d_%H.hpl",
+            "product": "VAD",
+        },
+        "site": {
+            "code": "LUPD"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"204"
+        },
+        "raw_file": {
+            "datetime_pattern": "User5_{instrument_serial}_%Y%m%d_%H.hpl",
+            "product": "VAD",
+        },
+        "site": {
+            "code": "ARBO"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"175"
+        },
+        "raw_file": {
+            "datetime_pattern": "User5_{instrument_serial}_%Y%m%d_%H.hpl",
+            "product": "VAD",
+        },
+        "site": {
+            "code": "CHEM"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"30"
+        },
+        "raw_file": {
+            "datetime_pattern": "VAD_{instrument_serial}_%Y%m%d_%H%M%S.hpl",
+            "product": "VAD",
+        },
+        "site": {
+            "code": "ROIS"
+        }
+    },
+    {
+        "instrument":{
+            "serial":"30"
+        },
+        "raw_file": {
+            "datetime_pattern": "Stare_{instrument_serial}_%Y%m%d_%H.hpl",
+            "product": "Stare",
+        },
+        "site": {
+            "code": "ROIS"
+        }
+    }
+]
