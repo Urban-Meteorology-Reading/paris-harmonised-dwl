@@ -36,7 +36,6 @@ PRODUCT_NAME = "streamLine_L1_to_L2"
 PRODUCT_LEVEL = 2
 
 
-
 def streamline_flag_low_signal_removed(dat):
 
     # mean intensity valid
@@ -156,7 +155,7 @@ def main():
         out_file = dt.strftime(file_date, OUTPUT_FILE)
         out_dir = os.path.join(harmonise.L2_BASEDIR, out_file)
         if not os.path.exists(os.path.dirname(out_dir)):
-            os.makedirs(os.path.dirname(out_dir))
+            os.makedirs(os.path.dirname(out_dir), exist_ok=True)
         dat.to_netcdf(out_dir, encoding=harmonise.encode_nc_compression(dat))
         print(out_dir)
 
