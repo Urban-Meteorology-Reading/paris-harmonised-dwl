@@ -13,14 +13,17 @@ import harmonise
 
 KNOWN_GATE_LENGTH = 50
 AGGREGATION_INTERVAL = "10min"
+# L1 data availability < DATA_AVAILABILITY_SUSPECT_WARN_THRESHOLD? flag warn
 DATA_AVAILABILITY_SUSPECT_WARN_THRESHOLD = 75
+# L1 data availability < DATA_AVAILABILITY_SUSPECT_REMOVED_THRESHOLD? flag err and remove
 DATA_AVAILABILITY_SUSPECT_REMOVED_THRESHOLD = 10
+
 INPUT_FILENAME_GSUB = "wlscerea_1a_windLz1Lb87M10mn-HR_v02_*"
 INPUT_FILE_DT = "wlscerea_1a_windLz1Lb87M10mn-HR_v02_%Y%m%d_%H%M%S_1440.nc"
-PRODUCT_NAME = "wls70"
+PRODUCT_NAME = "wls70_L1a_to_L2.py"
 SYSTEM_SERIAL = "10"
 PRODUCT_LEVEL = 2
-__version__ = 1.13
+__version__ = 1.14
 
 
 def wls70_flag_suspect_retrieval_warn_and_removed(dat):

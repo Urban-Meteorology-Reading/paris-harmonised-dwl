@@ -11,22 +11,17 @@ import os
 from datetime import datetime as dt
 import harmonise
 
-# todo: generic and standardised filenames
 
 INPUT_FILENAME_GSUB = "w400s_1a_LqualairLzamIdbs_v01_*"
 INPUT_FILE_DT = "w400s_1a_LqualairLzamIdbs_v01_%Y%m%d_%H%M%S_1440.nc"
 SYSTEM_SERIAL = "WCS000243"
-PRODUCT_NAME = "w400s"
+PRODUCT_NAME = "w400s_L1a_to_L2.py"
 OUTPUT_FILE = f"{PRODUCT_NAME}_%Y%m%d_%H%M%S_{SYSTEM_SERIAL}.nc"
 PRODUCT_LEVEL = 2
-__version__ = 1.02
+__version__ = 1.03
 
 
 def gate_index_to_range(ds):
-    # todo: clarify first range gate. The 30 min average product has first
-    # range gate at 150 m, but the new product has
-    # ds.range.meters_to_center_of_first_gate of 150 m
-    # check with the 30 min product that I have
     first_gate_max_range = int(ds.range.meters_to_center_of_first_gate) + \
         (int(ds.range.meters_between_gates) / 2)
     gate_length = int(ds.range.meters_between_gates)

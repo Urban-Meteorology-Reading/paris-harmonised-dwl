@@ -12,19 +12,29 @@ from datetime import datetime as dt
 import harmonise
 import numpy as np
 
+__version__ = 1.02
+
+# gates lower than INVALID_LOW_RANGE_GATE_M are rejected
 INVALID_LOW_RANGE_GATE_M = 45
-MIN_CONSECUTIVE_RANGE_GATES = 3  # rm if fewer than this number gates in a row
+# rm values if fewer than MIN_CONSECUTIVE_RANGE_GATES of data in a row
+MIN_CONSECUTIVE_RANGE_GATES = 3
+# individual scan has > WIND_RMSE_VALID_WARN rmse? flag warn
 WIND_RMSE_VALID_WARN = 2
+# individual scan has > WIND_RMSE_VALID_WARN rmse? flag err and reject
 WIND_RMSE_VALID_ERR = 3
-NRAYS_PC_VALID = 75  # minimum number of valid rays (pc) needed in a given scan
+# individual scan has < WIND_RMSE_VALID_ERR? flag err and reject
+NRAYS_PC_VALID = 75
 # https://core.ac.uk/download/pdf/43337194.pdf
+# individual scan has mean intensity < INTENSITY_VALID_WARN ? flag warn
 INTENSITY_VALID_WARN = 1.007585
+# individual scan has mean intensity < INTENSITY_VALID_ERR ? flag err and reject
 INTENSITY_VALID_ERR = 1.0055
+
 L1_version = "2.14"
 INPUT_FILENAME_GSUB = f"*/halo-reader_WIND_????????_*{L1_version}.nc"
-PRODUCT_NAME = "StreamLine"
+PRODUCT_NAME = "streamLine_L1_to_L2"
 PRODUCT_LEVEL = 2
-__version__ = 1.02
+
 
 
 def streamline_flag_low_signal_removed(dat):
@@ -136,9 +146,9 @@ def main():
         dat = streamline_harmonise_varnames(dat)
         dat = harmonise.flag_ws_out_of_range(dat)
         dat = harmonise.select_preharmonisation_data_vars(dat)
-        dat.attrs = {"product_level": PRODUCT_LEVEL,
-                     "product_version": __version__,
-                     "product_name": PRODUCT_NAME,
+        dat.attrs = {"production_level": PRODUCT_LEVEL,
+                     "production_version": __version__,
+                     "production_name": PRODUCT_NAME,
                      }
         OUTPUT_FILE = harmonise.PRODUCT_FILENAME_TEMPLATE.format(
             product_name=PRODUCT_NAME, product_level=PRODUCT_LEVEL,
