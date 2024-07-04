@@ -12,7 +12,7 @@ from datetime import datetime as dt
 import harmonise
 import numpy as np
 
-__version__ = 1.02
+__version__ = 1.03
 
 # gates lower than INVALID_LOW_RANGE_GATE_M are rejected
 INVALID_LOW_RANGE_GATE_M = 45
@@ -32,7 +32,7 @@ INTENSITY_VALID_ERR = 1.0055
 
 L1_version = "2.14"
 INPUT_FILENAME_GSUB = f"*/halo-reader_WIND_????????_*{L1_version}.nc"
-PRODUCT_NAME = "streamLine_L1_to_L2"
+PRODUCT_NAME = "streamLine"
 PRODUCT_LEVEL = 2
 
 
@@ -113,6 +113,7 @@ def streamline_harmonise_varnames(dat):
         ("nrays", "n_rays_in_scan"),
         ("gate_length", "raw_gate_length"),
         ("npulses", "n_pulses"),
+        ("elevation", "scan_elevation"),
     ]
     drop_list = [
         "zonal_wind",
@@ -141,13 +142,11 @@ def main():
         dat = streamline_flag_low_signal_removed(dat)
         dat = streamline_flag_low_signal_warn(dat)
         dat = streamline_flag_suspect_retrieval_warn(dat)
-
         dat = streamline_harmonise_varnames(dat)
         dat = harmonise.flag_ws_out_of_range(dat)
         dat = harmonise.select_preharmonisation_data_vars(dat)
         dat.attrs = {"production_level": PRODUCT_LEVEL,
                      "production_version": __version__,
-                     "production_name": PRODUCT_NAME,
                      }
         OUTPUT_FILE = harmonise.PRODUCT_FILENAME_TEMPLATE.format(
             product_name=PRODUCT_NAME, product_level=PRODUCT_LEVEL,

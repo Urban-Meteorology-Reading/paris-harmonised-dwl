@@ -20,10 +20,10 @@ DATA_AVAILABILITY_SUSPECT_REMOVED_THRESHOLD = 10
 
 INPUT_FILENAME_GSUB = "wlscerea_1a_windLz1Lb87M10mn-HR_v02_*"
 INPUT_FILE_DT = "wlscerea_1a_windLz1Lb87M10mn-HR_v02_%Y%m%d_%H%M%S_1440.nc"
-PRODUCT_NAME = "wls70_L1a_to_L2.py"
+PRODUCT_NAME = "wls70"
 SYSTEM_SERIAL = "10"
 PRODUCT_LEVEL = 2
-__version__ = 1.14
+__version__ = 1.15
 
 
 def wls70_flag_suspect_retrieval_warn_and_removed(dat):
@@ -67,12 +67,24 @@ def wls70_flag_suspect_retrieval_warn_and_removed(dat):
     return dat
 
 
+def wls70_get_scan_elevation(dat):
+    # get the scan elevation through time. It is given as angle from horizon
+    # and only one value per file. Use "temp_int" variable which is a 1D
+    # variable (through time)
+    scan_elevation = xr.zeros_like(dat.temp_int).rename("scan_elevation")
+    scan_elevation = scan_elevation + 90 - dat.scan_angle
+    dat["scan_elevation"] = scan_elevation
+
+    return dat
+
+
 def prepare_harmonisation(file):
     file_date = dt.strptime(os.path.basename(file), INPUT_FILE_DT)
     dat = xr.load_dataset(file)
 
     dat = wls70_flag_suspect_retrieval_warn_and_removed(dat)
     dat = harmonise.flag_ws_out_of_range(dat, ws_var_name="ws")
+    dat = wls70_get_scan_elevation(dat)
     dat = harmonise.select_preharmonisation_data_vars(dat)
     OUTPUT_FILE = harmonise.PRODUCT_FILENAME_TEMPLATE.format(
         product_name=PRODUCT_NAME, product_level=PRODUCT_LEVEL,

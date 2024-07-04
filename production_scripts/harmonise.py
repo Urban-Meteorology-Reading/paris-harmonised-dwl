@@ -63,6 +63,7 @@ def select_preharmonisation_data_vars(dat):
         "raw_gate_length",
         "n_rays_in_scan",
         "n_pulses",
+        "scan_elevation",
         "flag_low_signal_warn",
         "flag_low_signal_removed",
         "flag_suspect_retrieval_warn",

@@ -13,7 +13,7 @@ import os
 import datetime as dt
 import xarray as xr
 import logging
-
+#todo: # hereiam: sort ELVAATION for height adjustment
 # todo: expand and fill arrays to give continuous dataset filled with na where no data
 # todo: add maintenance events mask (manually identified, if needed)
 # todo: add misc data removal  mask (manually identified, if needed)
@@ -96,7 +96,7 @@ deployments_df = pd.json_normalize(deployments, sep="_")
 stations = np.unique(deployments_df.station_code)
 
 
-start_datetime_full = "2023-09-01T00:00:00"
+start_datetime_full = "2022-06-20T00:00:00"
 end_datetime_full = "2023-09-12T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
@@ -162,7 +162,7 @@ for i in range(0, len(datetime_range)-1):
                         f"{end_datetime.strip(' 00:00:00')} no files found"
                     )
                     continue
-                # dat = harmonise.range_to_height_adjust(dat)
+                dat = harmonise.range_to_height_adjust(dat)
                 dat = harmonise.sea_level_adjust(
                     dat, d.above_sea_level_height.item())
                 dat = harmonise.time_resample(dat, time_agg)
