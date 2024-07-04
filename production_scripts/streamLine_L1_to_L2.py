@@ -12,7 +12,7 @@ from datetime import datetime as dt
 import harmonise
 import numpy as np
 
-__version__ = 1.03
+__version__ = 1.1
 
 # gates lower than INVALID_LOW_RANGE_GATE_M are rejected
 INVALID_LOW_RANGE_GATE_M = 45
@@ -131,6 +131,11 @@ def streamline_harmonise_varnames(dat):
     return dat
 
 
+def streamLine_height_as_vertical_dimension(dat):
+    dat = dat.swap_dims({"range": "height"})
+    return dat
+
+
 def main():
     files = glob(os.path.join(harmonise.L1_BASEDIR, INPUT_FILENAME_GSUB))
     for file in files:
@@ -145,6 +150,7 @@ def main():
         dat = streamline_harmonise_varnames(dat)
         dat = harmonise.flag_ws_out_of_range(dat)
         dat = harmonise.select_preharmonisation_data_vars(dat)
+        dat = streamLine_height_as_vertical_dimension(dat)
         dat.attrs = {"production_level": PRODUCT_LEVEL,
                      "production_version": __version__,
                      }

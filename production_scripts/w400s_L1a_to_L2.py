@@ -17,8 +17,9 @@ INPUT_FILE_DT = "w400s_1a_LqualairLzamIdbs_v01_%Y%m%d_%H%M%S_1440.nc"
 SYSTEM_SERIAL = "WCS000243"
 PRODUCT_NAME = "w400s_L1a"
 OUTPUT_FILE = f"{PRODUCT_NAME}_%Y%m%d_%H%M%S_{SYSTEM_SERIAL}.nc"
+ELEVATION_ANGLE = 75  # the elevation angle of the DBS scan
 PRODUCT_LEVEL = 2
-__version__ = 1.04
+__version__ = 1.1
 
 
 def gate_index_to_range(ds):
@@ -122,6 +123,10 @@ def w400s_aggregate_time(dat, agg_res):
     agg_vars = []
     agg_vars.append(dat.u.resample(time=agg_res).mean().rename("u"))
     agg_vars.append(dat.v.resample(time=agg_res).mean().rename("v"))
+    agg_vars.append(dat.elevation.resample(
+        time=agg_res).min().rename("elevation_min"))
+    agg_vars.append(dat.elevation.resample(
+        time=agg_res).max().rename("elevation_max"))
 
     agg_vars.append(dat.v.resample(time=agg_res).count().rename("n_samples"))
     total_samples = xr.ones_like(dat.v).resample(
@@ -151,7 +156,7 @@ def main():
         dat["u"], dat["v"] = [(["time", "range"], i) for i in [u, v]]
         dat = w400s_apply_pre_aggregation_qc(dat)
         dat = w400s_aggregate_time(dat, agg_res="1min")
-        # hereiam: sort ELVAATION for height adjustment
+        dat = harmonise.range_to_height_adjust(dat, ELEVATION_ANGLE)
         dat = w400s_flag_suspect_retrieval_removed(dat)
         dat = w400s_flag_suspect_retrieval_warn(dat)
         dat = w400s_flag_ws_out_of_range(dat)

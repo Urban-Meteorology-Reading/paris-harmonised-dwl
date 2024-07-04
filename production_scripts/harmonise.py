@@ -21,18 +21,38 @@ def get_deployments(json_filename="meta/deployments-DWL.json"):
     return deployments
 
 
-def range_to_height_adjust(dat):
+def range_to_height_adjust(dat, elevation):
+    """
 
-    elevation = np.unique(dat.elevation).item()
 
-    height_values = dat.range * np.sin(np.deg2rad(elevation))
+    Parameters
+    ----------
+    dat : xr.Dataset
+        The DWL dataset with range as the vertical dimension
+    elevation : float
+        The angle from the horizon used in each wind retrieval ray.
 
-    raise NotImplementedError("Finish me!")
+    Returns
+    -------
+    xr.Dataset with height as the vertical dimension instead of range
+
+    """
+
+    dat["height"] = (dat.range * np.sin(np.deg2rad(elevation))
+                     ).rename("height")
+    dat = dat.swap_dims({"range": "height"})
+
+    return dat
 
 
 def sea_level_adjust(dat, instrument_sea_level):
 
-    dat = dat.assign_coords(range=(dat.range + instrument_sea_level))  # HEIGHT
+    if "range" in dat.dims:
+        raise ValueError(
+            "The dataset has (radial) range instead of (vertical) height")
+
+    dat = dat.assign_coords(
+        height=(dat.range + instrument_sea_level))  # HEIGHT
 
     return dat
 
@@ -141,17 +161,17 @@ def time_resample(dat, res=600, vardimdefs=vardimdefs):
     return out_dat
 
 
-def range_resample(dat, min_range, max_range, res_range):
+def height_resample(dat, min_height, max_height, res_height):
     # if the range coordinate is not int, then there are some issues
     # so far just assume range coordinate is int or n.5, so use 0.5 res step
     range_gate_lengths = np.unique(np.diff(dat.range))
     if len(range_gate_lengths) > 1:
         raise RangeGateLengthNotIdentical
-    dat = dat.sel(range=slice(0, max_range + (res_range * 2)))
-    dat = dat.reindex(range=np.arange(min_range, max_range, 1),
+    dat = dat.sel(height=slice(0, max_height + (res_height * 2)))
+    dat = dat.reindex(height=np.arange(min_height, max_height, 1),
                       method="nearest", tolerance=0.5)
-    dat = dat.interpolate_na(dim="range", max_gap=res_range*2)
-    dat = dat.sel(range=slice(min_range, max_range, res_range))
+    dat = dat.interpolate_na(dim="height", max_gap=res_height*2)
+    dat = dat.sel(height=slice(min_height, max_height, res_height))
 
     return dat
 

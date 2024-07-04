@@ -165,11 +165,11 @@ vardimdefs = [
     {
         "level": 3,
         "type": "dimension",
-        "name": "range",
-        "long_name": "range",
+        "name": "height",
+        "long_name": "height_above_mean_sea_level",
         "units": "m",
         "comment":  (
-                'Distance from sea level to center of range gate.'
+                'Height of center of range gate above mean sea level.'
         ),
     },
     {

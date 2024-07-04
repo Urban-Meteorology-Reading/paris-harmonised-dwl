@@ -13,7 +13,7 @@ import os
 import datetime as dt
 import xarray as xr
 import logging
-#todo: # hereiam: sort ELVAATION for height adjustment
+
 # todo: expand and fill arrays to give continuous dataset filled with na where no data
 # todo: add maintenance events mask (manually identified, if needed)
 # todo: add misc data removal  mask (manually identified, if needed)
@@ -30,6 +30,7 @@ import logging
 # todo: w400s sep 12 retrieval bad aroud midday
 # todo: Sep 26 the timesteps seem off for 30 in L3 product.
 # todo: Dec 7 - 8 L3 not run why
+# todo: remove range data_var and check that height asl is an output 1D (time) data var
 
 
 # mostly done or low prio:
@@ -75,7 +76,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.05
+__version__ = 1.11
 logging.basicConfig(
     filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
     filemode='a',
@@ -87,9 +88,9 @@ logging.info(f"L2_to_L3.py program version {__version__}")
 
 product_name = "paris_dwl_L3"
 time_aggs = [60*10]  # [60*10, 60*60]
-min_range = 0
-max_range = 5000
-res_range = 25
+min_height = 100
+max_height = 7000
+res_height = 25
 input_dir = harmonise.L2_BASEDIR
 deployments = harmonise.get_deployments()
 deployments_df = pd.json_normalize(deployments, sep="_")
@@ -162,9 +163,10 @@ for i in range(0, len(datetime_range)-1):
                         f"{end_datetime.strip(' 00:00:00')} no files found"
                     )
                     continue
-                dat = harmonise.range_to_height_adjust(dat)
                 dat = harmonise.sea_level_adjust(
                     dat, d.above_sea_level_height.item())
+                dat = harmonise.height_resample(
+                    dat, min_height, max_height, res_height)
                 dat = harmonise.time_resample(dat, time_agg)
                 ws, wd = harmonise.vector_to_ws_wd(dat.u.values, dat.v.values)
                 dat = dat.assign(ws=(["time", "range"], ws),
