@@ -22,7 +22,7 @@ import logging
 # todo: add L3 attrs
 # todo: download 2021 eiffel tower data
 
-# todo: IMPORTANT: CONVERT RANGE TO VERTICAL HEIGHT ABOVE INSTRUMENT FOR ALL INSTRUMENT TYPES
+# todo: IMPORTANT: CONVERT RANGE TO VERTICAL HEIGHT ABOVE INSTRUMENT FOR ALL INSTRUMENT TYPES at L2 level
 # todo: Figure out how to handle concurrent station deployments error for 2022-12-07 00:00:00 - 2022-12-08 00:00:00
 # todo: DATA_AVAILABILITY_SUSPECT_WARN_THRESHOLD = 75 wls70 - check if that's reasonable. see e.g. Jul 12 2022. Top of BL is lost.
 # todo: Jul 13 morning w400s std full profile threhsold has removed a "good" set of profiles
@@ -165,8 +165,6 @@ for i in range(0, len(datetime_range)-1):
                 # dat = harmonise.range_to_height_adjust(dat)
                 dat = harmonise.sea_level_adjust(
                     dat, d.above_sea_level_height.item())
-                dat = harmonise.range_resample(
-                    dat, min_range, max_range, res_range)
                 dat = harmonise.time_resample(dat, time_agg)
                 ws, wd = harmonise.vector_to_ws_wd(dat.u.values, dat.v.values)
                 dat = dat.assign(ws=(["time", "range"], ws),
