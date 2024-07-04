@@ -32,7 +32,8 @@ os.environ["OMP_NUM_THREADS"] = '7'
 program_summary = (
     f"Production of L1 horizontal wind profiles from RAW .hpl StreamLine scan "
     f"files using a modified version of "
-    f"https://github.com/actris-cloudnet/halo-reader version {__haloreader_version__}"
+    f"https://github.com/actris-cloudnet/halo-reader version {__haloreader_version__} "
+    f"with code available on https://github.com/willmorrison1/paris-harmonised-dwl"
 )
 
 
