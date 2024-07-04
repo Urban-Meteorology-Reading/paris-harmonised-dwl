@@ -19,7 +19,7 @@ import os
 import numpy as np
 import harmonise
 import logging
-import filemeta
+from meta import filemeta
 import fnmatch
 from haloreader import __version__ as __haloreader_version__
 
