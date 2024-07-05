@@ -40,7 +40,7 @@ def range_to_height_adjust(dat, elevation):
 
     dat["height"] = (dat.range * np.sin(np.deg2rad(elevation))
                      ).rename("height")
-    dat = dat.swap_dims({"range": "height"})
+    dat = dat.swap_dims({"range": "height"}).drop("range")
 
     return dat
 
@@ -52,7 +52,7 @@ def sea_level_adjust(dat, instrument_sea_level):
             "The dataset has (radial) range instead of (vertical) height")
 
     dat = dat.assign_coords(
-        height=(dat.range + instrument_sea_level))  # HEIGHT
+        height=(dat.height + instrument_sea_level))
 
     return dat
 
@@ -172,6 +172,7 @@ def height_resample(dat, min_height, max_height, res_height):
                       method="nearest", tolerance=0.5)
     dat = dat.interpolate_na(dim="height", max_gap=res_height*2)
     dat = dat.sel(height=slice(min_height, max_height, res_height))
+    dat = dat.drop("range")
 
     return dat
 

@@ -12,7 +12,7 @@ from datetime import datetime as dt
 import harmonise
 import numpy as np
 
-__version__ = 1.1
+__version__ = 1.11
 
 # gates lower than INVALID_LOW_RANGE_GATE_M are rejected
 INVALID_LOW_RANGE_GATE_M = 45
@@ -149,8 +149,8 @@ def main():
         dat = streamline_flag_suspect_retrieval_warn(dat)
         dat = streamline_harmonise_varnames(dat)
         dat = harmonise.flag_ws_out_of_range(dat)
-        dat = harmonise.select_preharmonisation_data_vars(dat)
         dat = streamLine_height_as_vertical_dimension(dat)
+        dat = harmonise.select_preharmonisation_data_vars(dat)
         dat.attrs = {"production_level": PRODUCT_LEVEL,
                      "production_version": __version__,
                      }

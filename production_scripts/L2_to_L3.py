@@ -76,7 +76,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.11
+__version__ = 1.12
 logging.basicConfig(
     filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
     filemode='a',
@@ -97,7 +97,7 @@ deployments_df = pd.json_normalize(deployments, sep="_")
 stations = np.unique(deployments_df.station_code)
 
 
-start_datetime_full = "2022-06-20T00:00:00"
+start_datetime_full = "2023-09-02T00:00:00"
 end_datetime_full = "2023-09-12T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
@@ -169,8 +169,8 @@ for i in range(0, len(datetime_range)-1):
                     dat, min_height, max_height, res_height)
                 dat = harmonise.time_resample(dat, time_agg)
                 ws, wd = harmonise.vector_to_ws_wd(dat.u.values, dat.v.values)
-                dat = dat.assign(ws=(["time", "range"], ws),
-                                 wd=(["time", "range"], wd))
+                dat = dat.assign(ws=(["time", "height"], ws),
+                                 wd=(["time", "height"], wd))
                 # appropriate unless multiple system IDs in one file interval (maybe)
                 # regardless, an exception for that is raised earlier. so I will be able
                 # to check that if it happen
@@ -195,6 +195,7 @@ for i in range(0, len(datetime_range)-1):
                 time_agg=time_agg,
                 version=__version__)
             nc_file_full = os.path.join(harmonise.L3_BASEDIR, nc_file)
+            print(nc_file_full)
             dat_out.to_netcdf(path=nc_file_full,
                               encoding=harmonise.encode_nc_compression(dat_out))
 
