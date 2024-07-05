@@ -31,7 +31,7 @@ import logging
 # todo: Sep 26 the timesteps seem off for 30 in L3 product.
 # todo: Dec 7 - 8 L3 not run why
 # todo: remove range data_var and check that height asl is an output 1D (time) data var
-
+# todo: change coordinate name from "station_code" to "station"
 
 # mostly done or low prio:
 # todo: fine-tune QC for StreamLine based on quicklooks
@@ -97,8 +97,8 @@ deployments_df = pd.json_normalize(deployments, sep="_")
 stations = np.unique(deployments_df.station_code)
 
 
-start_datetime_full = "2023-09-02T00:00:00"
-end_datetime_full = "2023-09-12T00:00:00"
+start_datetime_full = "2022-06-14T00:00:00"
+end_datetime_full = "2024-04-01T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
@@ -127,10 +127,10 @@ for i in range(0, len(datetime_range)-1):
                         "Figure out how to handle concurrent station deployments")
 
                 if d.shape[0] == 0:
-                    # print(
-                    #     f"No deployment for {station} "
-                    #     f"{start_datetime} - {end_datetime}"
-                    # )
+                    logging.debug(
+                        f"No deployment for {station} "
+                        f"{start_datetime} - {end_datetime}"
+                    )
                     continue
 
                 filenames = []
@@ -195,7 +195,7 @@ for i in range(0, len(datetime_range)-1):
                 time_agg=time_agg,
                 version=__version__)
             nc_file_full = os.path.join(harmonise.L3_BASEDIR, nc_file)
-            print(nc_file_full)
+            logging.info(nc_file_full)
             dat_out.to_netcdf(path=nc_file_full,
                               encoding=harmonise.encode_nc_compression(dat_out))
 

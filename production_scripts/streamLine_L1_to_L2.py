@@ -12,7 +12,7 @@ from datetime import datetime as dt
 import harmonise
 import numpy as np
 
-__version__ = 1.11
+__version__ = 1.12
 
 # gates lower than INVALID_LOW_RANGE_GATE_M are rejected
 INVALID_LOW_RANGE_GATE_M = 45
@@ -132,7 +132,7 @@ def streamline_harmonise_varnames(dat):
 
 
 def streamLine_height_as_vertical_dimension(dat):
-    dat = dat.swap_dims({"range": "height"})
+    dat = dat.swap_dims({"range": "height"}).drop("range")
     return dat
 
 

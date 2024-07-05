@@ -11,7 +11,7 @@ from vardimdefs import vardimdefs
 from definitions import *
 
 
-class RangeGateLengthNotIdentical(Exception):
+class GateLengthNotIdentical(Exception):
     pass
 
 
@@ -164,15 +164,16 @@ def time_resample(dat, res=600, vardimdefs=vardimdefs):
 def height_resample(dat, min_height, max_height, res_height):
     # if the range coordinate is not int, then there are some issues
     # so far just assume range coordinate is int or n.5, so use 0.5 res step
-    range_gate_lengths = np.unique(np.diff(dat.range))
-    if len(range_gate_lengths) > 1:
-        raise RangeGateLengthNotIdentical
+    height_gate_lengths = np.unique(np.round(np.diff(dat.height), 1))
+    if len(height_gate_lengths) > 1:
+        raise GateLengthNotIdentical
     dat = dat.sel(height=slice(0, max_height + (res_height * 2)))
     dat = dat.reindex(height=np.arange(min_height, max_height, 1),
                       method="nearest", tolerance=0.5)
     dat = dat.interpolate_na(dim="height", max_gap=res_height*2)
     dat = dat.sel(height=slice(min_height, max_height, res_height))
-    dat = dat.drop("range")
+    if "range" in dat.data_vars:
+        dat = dat.drop("range")
 
     return dat
 
