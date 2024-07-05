@@ -20,9 +20,6 @@ import logging
 # todo: add system_is_deployed boolean flag
 # todo: add L2 versions to L2 atts
 # todo: add L3 attrs
-# todo: download 2021 eiffel tower data
-
-# todo: IMPORTANT: CONVERT RANGE TO VERTICAL HEIGHT ABOVE INSTRUMENT FOR ALL INSTRUMENT TYPES at L2 level
 # todo: Figure out how to handle concurrent station deployments error for 2022-12-07 00:00:00 - 2022-12-08 00:00:00
 # todo: DATA_AVAILABILITY_SUSPECT_WARN_THRESHOLD = 75 wls70 - check if that's reasonable. see e.g. Jul 12 2022. Top of BL is lost.
 # todo: Jul 13 morning w400s std full profile threhsold has removed a "good" set of profiles
@@ -30,10 +27,11 @@ import logging
 # todo: w400s sep 12 retrieval bad aroud midday
 # todo: Sep 26 the timesteps seem off for 30 in L3 product.
 # todo: Dec 7 - 8 L3 not run why
-# todo: remove range data_var and check that height asl is an output 1D (time) data var
 # todo: change coordinate name from "station_code" to "station"
 
+
 # mostly done or low prio:
+# todo: download 2021 eiffel tower data
 # todo: fine-tune QC for StreamLine based on quicklooks
 # todo: add nsamples?
 # todo: check that wls70 and w400s range gates are middle of gate coord
@@ -42,6 +40,8 @@ import logging
 
 
 # done:
+# todo: remove range data_var and check that height asl is an output 1D (time) data var
+# todo: IMPORTANT: CONVERT RANGE TO VERTICAL HEIGHT ABOVE INSTRUMENT FOR ALL INSTRUMENT TYPES at L2 level
 # todo: IMPORTANT: StreamLine RAW to L1 need to account for different deployments at same date
 # todo: 2024-02-09 - 2024-02-12 ARBO 204 missing: halo = read(files, product=product) inconsistent azimuths. why? rejected - bad raw data
 # todo: StreamLine 30: what is going on with background correction throughout deployment? SNR thresh adjusted

@@ -88,7 +88,7 @@ def select_preharmonisation_data_vars(dat):
         "flag_low_signal_removed",
         "flag_suspect_retrieval_warn",
         "flag_suspect_retrieval_removed",
-        "flag_ws_out_of_range",
+        "flag_ws_out_of_range_removed",
     ]
     dat = dat[[var for var in dat.data_vars if var in data_vars]]
 
