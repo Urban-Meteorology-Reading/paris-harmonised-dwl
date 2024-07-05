@@ -105,7 +105,8 @@ vardimdefs = [
         "long_name": "number_of_rays_in_scan",
         "units": defs.UNITLESS_UNITS,
         "comment":  (
-            'The number of rays in a given \'scan_type\' scan.'
+            'The number of rays in a given scan. E.g. 12 for a VAD scan that '
+            'has 12 samples within one scan'
         ),
     },
     {
@@ -140,7 +141,8 @@ vardimdefs = [
         "standard_name": "wind_speed",
         "units": defs.WS_UNITS,
         "comment":  (
-            'Calculated from the u and v wind components.'
+            'Horizontal wind speed calculated from the eastward_wind and '
+            'northward_wind wind components.'
         ),
     },
     {
@@ -150,7 +152,8 @@ vardimdefs = [
         "standard_name": "wind_from_direction",
         "units": defs.WS_UNITS,
         "comment":  (
-            'Calculated from the u and v wind components.'
+            'Horizontal wind direction clockwise from true north, calculated '
+            'from the eastward_wind and northward_wind wind components.'
         ),
     },
     {
@@ -169,7 +172,7 @@ vardimdefs = [
         "long_name": "height_above_mean_sea_level",
         "units": "m",
         "comment":  (
-                'Height of center of range gate above mean sea level.'
+                'Height of centre of range gate above mean sea level.'
         ),
     },
     {
