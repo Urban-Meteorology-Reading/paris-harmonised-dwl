@@ -178,11 +178,11 @@ vardimdefs = [
     {
         "level": 3,
         "type": "dimension",
-        "name": "station_code",
-        "long_name": "station_code",
+        "name": "station",
+        "long_name": "station",
         "units": "m",
         "comment":  (
-                'Unique identifier for the measurement station.'
+                'The station code that uniquely identifies the measurement station.'
         ),
     },
     {

@@ -76,7 +76,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.13
+__version__ = 1.14
 logging.basicConfig(
     filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
     filemode='a',
@@ -88,9 +88,6 @@ logging.info(f"L2_to_L3.py program version {__version__}")
 
 product_name = "paris_dwl_L3"
 time_aggs = [60*10]  # [60*10, 60*60]
-min_height = 100
-max_height = 7000
-res_height = 25
 input_dir = harmonise.L2_BASEDIR
 deployments = harmonise.get_deployments()
 deployments_df = pd.json_normalize(deployments, sep="_")
@@ -166,7 +163,8 @@ for i in range(0, len(datetime_range)-1):
                 dat = harmonise.sea_level_adjust(
                     dat, d.above_sea_level_height.item())
                 dat = harmonise.height_resample(
-                    dat, min_height, max_height, res_height)
+                    dat, harmonise.MIN_HEIGHT, harmonise.MAX_HEIGHT,
+                    harmonise.RES_HEIGHT)
                 dat = harmonise.time_resample(dat, time_agg)
                 ws, wd = harmonise.vector_to_ws_wd(dat.u.values, dat.v.values)
                 dat = dat.assign(ws=(["time", "height"], ws),
@@ -176,9 +174,8 @@ for i in range(0, len(datetime_range)-1):
                 # to check that if it happen
                 dat = harmonise.add_system_id_var(
                     dat, d.instrument_serial.item())
-
-                dat = dat.expand_dims(dim="station_code").assign_coords(
-                    station_code=("station_code", [station]))
+                dat = dat.expand_dims(dim="station").assign_coords(
+                    station=("station", [station]))
                 dat = harmonise.apply_attrs(dat, level=3)
                 dat.time.attrs["comment"] = dat.time.attrs["comment"].format(
                     time_window_s=time_agg)
@@ -186,7 +183,7 @@ for i in range(0, len(datetime_range)-1):
             if not dat_list:
                 continue
 
-            dat_out = xr.concat(dat_list, dim="station_code")
+            dat_out = xr.concat(dat_list, dim="station")
 
             nc_file = "{product_name}V{version}_{start_time}_{end_time}_{time_agg}s.nc".format(
                 product_name=product_name,

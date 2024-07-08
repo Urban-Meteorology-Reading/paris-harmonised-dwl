@@ -14,9 +14,9 @@ WS_UNITS = "m.s^-1"
 UNITLESS_UNITS = "unitless"
 
 # min, max and resolution of the harmonised vertical coordinates
-RANGE_MIN = 0
-RANGE_MAX = 5000
-RANGE_RES = 25
+MIN_HEIGHT = 0
+MAX_HEIGHT = 6500
+RES_HEIGHT = 25
 
 # maximum valid wind speed m/s for all QC
 MAX_VALID_WS = 60
