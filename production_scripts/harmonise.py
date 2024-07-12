@@ -21,6 +21,12 @@ def get_deployments(json_filename="meta/deployments-DWL.json"):
     return deployments
 
 
+def get_stations(json_filename="meta/stations-DWL.json"):
+    with open(json_filename) as json_file:
+        deployments = json.load(json_file)
+    return deployments
+
+
 def range_to_height_adjust(dat, elevation):
     """
 

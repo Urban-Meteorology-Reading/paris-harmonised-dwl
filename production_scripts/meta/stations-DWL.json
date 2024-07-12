@@ -1,0 +1,51 @@
+[
+    {
+    "station":{
+    "code":"PASIRT",
+    "lat":48.7177,
+    "lon":2.2086
+    }
+    },
+    {
+    "station": {
+    "code": "PAARBO",
+    "lat": 48.7717,
+    "lon": 2.2677
+    }
+    },
+    {
+    "station": {
+    "code": "PALUPD",
+    "lat": 48.8278,
+    "lon": 2.3806
+    }
+    },
+    {
+      "station": {
+    "code": "PAJUSS",
+    "lat": 48.8469,
+    "lon": 2.3555
+    }
+    },
+    {
+    "station": {
+    "code": "PACHEM",
+    "lat": 48.9047,
+    "lon": 2.4447
+    }
+    },
+    {
+     "station": {
+    "code": "PAARBO",
+    "lat": 48.7717,
+    "lon": 2.2677
+    }
+    },
+    {
+    "station": {
+    "code": "PAROIS",
+    "lat": 49.016,
+    "lon": 2.5337
+    }
+    }
+]

@@ -28,7 +28,7 @@ import logging
 # todo: Sep 26 the timesteps seem off for 30 in L3 product.
 # todo: Dec 7 - 8 L3 not run why
 # todo: change coordinate name from "station_code" to "station"
-
+# todo: asl_height(station) and lat(station, lon(station) vars
 
 # mostly done or low prio:
 # todo: download 2021 eiffel tower data
@@ -76,7 +76,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.15
+__version__ = 1.16
 logging.basicConfig(
     filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
     filemode='a',
@@ -87,15 +87,15 @@ logging.basicConfig(
 logging.info(f"L2_to_L3.py program version {__version__}")
 
 product_name = "paris_dwl_L3"
-time_aggs = [60*10]  # [60*10, 60*60]
+time_aggs = [60*10]
 input_dir = harmonise.L2_BASEDIR
 deployments = harmonise.get_deployments()
 deployments_df = pd.json_normalize(deployments, sep="_")
 stations = np.unique(deployments_df.station_code)
 
 
-start_datetime_full = "2022-06-14T00:00:00"
-end_datetime_full = "2024-04-01T00:00:00"
+start_datetime_full = "2023-08-06T00:00:00"
+end_datetime_full = "2024-08-12T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
