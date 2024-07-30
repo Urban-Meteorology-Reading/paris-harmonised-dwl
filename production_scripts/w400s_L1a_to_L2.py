@@ -10,7 +10,7 @@ import xarray as xr
 import os
 from datetime import datetime as dt
 import harmonise
-
+import numpy as np
 
 INPUT_FILENAME_GSUB = "w400s_1a_LqualairLzamIdbs_v01_*"
 INPUT_FILE_DT = "w400s_1a_LqualairLzamIdbs_v01_%Y%m%d_%H%M%S_1440.nc"
@@ -19,7 +19,7 @@ PRODUCT_NAME = "w400s_L1a"
 OUTPUT_FILE = f"{PRODUCT_NAME}_%Y%m%d_%H%M%S_{SYSTEM_SERIAL}.nc"
 ELEVATION_ANGLE = 75  # the elevation angle of the DBS scan
 PRODUCT_LEVEL = 2
-__version__ = 1.2
+__version__ = 1.27
 
 
 def gate_index_to_range(ds):
@@ -34,9 +34,8 @@ def gate_index_to_range(ds):
     return ds
 
 
-def w400s_apply_pre_aggregation_qc(dat, std_window="6min",
-                                   std_threshold=3,
-                                   fraction_above_std_threshold=0.25):
+def w400s_apply_pre_aggregation_qc(dat, std_window="5min",
+                                   fraction_above_maxws_threshold=0.01):
     """
 
 
@@ -67,31 +66,35 @@ def w400s_apply_pre_aggregation_qc(dat, std_window="6min",
     dat["u"] = dat["u"].where(~wind_speed_status_invalid)
     dat["v"] = dat["v"].where(~wind_speed_status_invalid)
     # get the std across the time window (for each range gate)
-    u_std_window = dat.u.resample(time=std_window).std() > std_threshold
-    v_std_window = dat.u.resample(time=std_window).std() > std_threshold
-    uv_std = (u_std_window | v_std_window)
+    median_u = dat.u.resample(time=std_window).median()
+    median_v = dat.v.resample(time=std_window).median()
+    median_ws = (np.sqrt(median_u**2 + median_v**2))
+    median_ws_threshold = median_ws > harmonise.MAX_VALID_WS
+    # v_std_window = std_v > std_threshold
+    # uv_std = (u_std_window | v_std_window)
     # get the fraction of range gates that are above the std threshold
-    uv_std_f = (uv_std.sum(dim="range") / uv_std.count(dim="range"))
-    uv_std_threshold = uv_std_f.reindex_like(
-        dat, method="nearest") > fraction_above_std_threshold
+    ws_f = (median_ws_threshold.sum(dim="range") / median_u.count(dim="range"))
+    ws_threshold = ws_f.reindex_like(
+        dat, method="nearest") > fraction_above_maxws_threshold
 
-    suspect_retrieval_removed = wind_speed_status_invalid | uv_std_threshold
+    suspect_retrieval_removed = wind_speed_status_invalid
+    suspect_retrieval_removed[ws_threshold] = True
     dat["u"] = dat["u"].where(~suspect_retrieval_removed)
     dat["v"] = dat["v"].where(~suspect_retrieval_removed)
     dat["flag_wind_speed_status_invalid"] = wind_speed_status_invalid.rename(
         "flag_wind_speed_status_invalid")
-    dat["flag_uv_std_threshold_invalid"] = uv_std_threshold.rename(
-        "flag_uv_std_threshold_invalid")
+    dat["flag_ws_threshold_invalid"] = ws_threshold.rename(
+        "flag_ws_threshold_invalid")
     dat = harmonise.flag_ws_out_of_range(dat)
 
     return dat
 
 
 def w400s_flag_suspect_retrieval_removed(dat):
-    uv_std_threshold_invalid = dat.flag_uv_std_threshold_invalid_pc == 100
+    ws_threshold_invalid = dat.flag_ws_threshold_invalid_pc == 100
     flag_wind_speed_status_invalid = dat.flag_wind_speed_status_invalid_pc == 100
 
-    suspect_retrieval_removed = (uv_std_threshold_invalid |
+    suspect_retrieval_removed = (ws_threshold_invalid |
                                  flag_wind_speed_status_invalid)
     dat["u"] = dat["u"].where(~suspect_retrieval_removed)
     dat["v"] = dat["v"].where(~suspect_retrieval_removed)
@@ -100,14 +103,14 @@ def w400s_flag_suspect_retrieval_removed(dat):
 
 
 def w400s_flag_suspect_retrieval_warn(dat):
-    uv_std_threshold_warn = (dat.flag_uv_std_threshold_invalid_pc > 0) &\
-        (dat.flag_uv_std_threshold_invalid_pc < 100)
+    ws_threshold_warn = (dat.flag_ws_threshold_invalid_pc > 0) &\
+        (dat.flag_ws_threshold_invalid_pc < 100)
     flag_wind_speed_status_warn = (dat.flag_wind_speed_status_invalid_pc > 0) &\
         (dat.flag_wind_speed_status_invalid_pc < 100)
     flag_ws_out_of_range_warn = (dat.flag_ws_out_of_range_pc > 0) &\
         (dat.flag_ws_out_of_range_pc < 100)
 
-    suspect_retrieval_warn = (uv_std_threshold_warn |
+    suspect_retrieval_warn = (ws_threshold_warn |
                               flag_wind_speed_status_warn |
                               flag_ws_out_of_range_warn)
     dat["flag_suspect_retrieval_warn"] = suspect_retrieval_warn.rename(
@@ -152,9 +155,8 @@ def main():
         file_date = dt.strptime(os.path.basename(file), INPUT_FILE_DT)
         dat = xr.load_dataset(file)
         dat = gate_index_to_range(dat)
-        u, v = harmonise.ws_wd_to_vector(
-            dat["horizontal_wind_speed"].values,
-            dat["wind_direction"].values)
+        u, v = harmonise.ws_wd_to_vector(dat["horizontal_wind_speed"].values,
+                                         dat["wind_direction"].values)
         dat["u"], dat["v"] = [(["time", "range"], i) for i in [u, v]]
         dat = w400s_apply_pre_aggregation_qc(dat)
         dat = w400s_aggregate_time(dat, agg_res="1min")

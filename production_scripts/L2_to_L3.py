@@ -17,7 +17,7 @@ import logging
 # todo: expand and fill arrays to give continuous dataset filled with na where no data
 # todo: Figure out how to handle concurrent station deployments error for 2022-12-07 00:00:00 - 2022-12-08 00:00:00
 # todo: DATA_AVAILABILITY_SUSPECT_WARN_THRESHOLD = 75 wls70 - check if that's reasonable. see e.g. Jul 12 2022. Top of BL is lost.
-# todo: use start of August 2023 to check this: w400s go over "uv_std_threshold" again. why are there stripes in the flag_suspect_removal. also after oct 4 2022 w400s there is a change in scan and some of the wind pofiles are filtered - check sd filter
+# todo: 20230903 to check this: w400s go over "uv_std_threshold" again. why are there stripes in the flag_suspect_removal. also after oct 4 2022 w400s there is a change in scan and some of the wind pofiles are filtered - check sd filter
 # todo: w400s sep 12 retrieval bad aroud midday
 # todo: Sep 26 the timesteps seem off for 30 in L3 product.
 # todo: Dec 7 - 8 L3 not run why?
@@ -25,19 +25,22 @@ import logging
 # s/n 30 ['D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/30\\streamLine_L2_V1.12_20230807_000000_30.nc', 'D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/30\\streamLine_L2_V1.12_20230808_000000_30.nc']
 
 
-
 # todo low prio
 # todo: add L2 versions to L2 atts
 # todo: add system_is_deployed boolean flag
 # todo: add L3 attrs
-
 
 # todo done
 # todo: Jul 13 morning w400s std full profile threhsold has removed a "good" set of profiles
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.23
+__version__ = 1.29
+l2_versions = {
+    "StreamLine": "V1.12",
+    "WLS70": "V1.21",
+    "w400s": "V1.27",
+}
 logging.basicConfig(
     filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
     filemode='a',
@@ -56,14 +59,10 @@ station_codes = np.unique(deployments_df.station_code)
 stations = harmonise.get_stations()
 stations_df = pd.json_normalize(stations, sep="_").rename(
     columns={"station_code": "station"}).set_index("station")
-l2_versions = {
-    "StreamLine": "V1.12",
-    "WLS70": "V1.2",
-    "w400s": "V1.2",
-}
 
-start_datetime_full = "2023-08-01T00:00:00"
-end_datetime_full = "2024-06-23T00:00:00"
+
+start_datetime_full = "2022-06-14T00:00:00"
+end_datetime_full = "2024-05-01T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
@@ -163,7 +162,8 @@ for i in range(0, len(datetime_range)-1):
                 "metadata_doi": "ESSC_DOI",
                 "processing_level": "Level 3 (L3): Raw data converted to L1 then QAQC at L2 then harmonisation at L3. Consult metadata_doi for details.",
                 "processing_name": "L2_to_L3.py",
-                "processing_version": __version__,
+                "processing_version_L3": __version__,
+                "processing_version_L2": str(l2_versions),
                 "processing_url": "https://github.com/willmorrison1/paris-harmonised-dwl, https://github.com/Urban-Meteorology-Reading/paris-harmonised-dwl",
                 "processing_time_utc": dt.datetime.now(tz=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
                 "start_time_utc": start_datetime,
