@@ -31,7 +31,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.2
+__version__ = 1.22
 logging.basicConfig(
     filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
     filemode='a',
@@ -145,19 +145,20 @@ for i in range(0, len(datetime_range)-1):
 
             attrs = {
                 "title": "Harmonised boundary layer wind profile dataset from six ground-based doppler wind lidars across Paris, France",
-                "creator_name": "William Morrison (williamtjmorrison@gmail.com)",
+                "creator_name": "William Morrison (william.morrison@meteo.uni-freiburg.de, williamtjmorrison@gmail.com)",
                 "creator_institution": "Environmental Meteorology, Institute of Earth and Environmental Sciences, Faculty of Environment and Natural Resources, University of Freiburg, Freiburg, 79085, Germany",
                 "principal_investigator": "Andreas Christen (andreas.christen@meteo.uni-freiburg.de)",
                 "metadata_doi": "ESSC_DOI",
-                "processing_level": "Level 3 (L3): Raw data converted to L1 then QAQC at L2 then harmonisation at L3.",
+                "processing_level": "Level 3 (L3): Raw data converted to L1 then QAQC at L2 then harmonisation at L3. Consult metadata_doi for details.",
                 "processing_name": "L2_to_L3.py",
                 "processing_version": __version__,
                 "processing_url": "https://github.com/willmorrison1/paris-harmonised-dwl, https://github.com/Urban-Meteorology-Reading/paris-harmonised-dwl",
-                "processing_date": dt.datetime.now(tz=dt.timezone.utc).isoformat(),
+                "processing_time_utc": dt.datetime.now(tz=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
                 "start_time_utc": start_datetime,
                 "end_time_utc": end_datetime,
-                "aggreagtion_time_s": time_agg,
+                "aggregation_time_s": time_agg,
             }
+            dat_out.attrs = attrs
 
             nc_file = "{product_name}V{version}_{start_time}_{end_time}_{time_agg}s.nc".format(
                 product_name=product_name,
