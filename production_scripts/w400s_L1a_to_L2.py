@@ -148,7 +148,6 @@ def main():
 
     files = glob(os.path.join(harmonise.L1_BASEDIR,
                               SYSTEM_SERIAL, INPUT_FILENAME_GSUB))
-    files = ['D:/Urbisphere/sandbox/data/L1/by-serialnr/France/Paris/WCS000243\\w400s_1a_LqualairLzamIdbs_v01_20230713_000000_1440.nc']
     for file in files:
         file_date = dt.strptime(os.path.basename(file), INPUT_FILE_DT)
         dat = xr.load_dataset(file)
@@ -172,7 +171,6 @@ def main():
         if not os.path.exists(os.path.dirname(out_dir)):
             os.makedirs(os.path.dirname(out_dir), exist_ok=True)
         print(out_dir)
-        dat.flag_suspect_retrieval_warn.plot(y="height")
         dat.to_netcdf(
             out_dir, encoding=harmonise.encode_nc_compression(dat))
 

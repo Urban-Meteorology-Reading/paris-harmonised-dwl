@@ -1,7 +1,8 @@
 [
     {
         "instrument":{
-            "serial":"03"
+            "serial":"03",
+            "type": "StreamLine"
         },
         "raw_files": [{
             "datetime_pattern": "stare_{instrument_serial}_%Y%m%d_%H.hpl",
@@ -22,7 +23,8 @@
     },
     {
         "instrument":{
-            "serial":"30"
+            "serial":"30",
+            "type": "StreamLine"
         },
         "raw_files": [{
             "datetime_pattern": "stare_{instrument_serial}_%Y%m%d_%H.hpl",
@@ -46,7 +48,8 @@
     },
     {
         "instrument":{
-            "serial":"30"
+            "serial":"30",
+            "type": "StreamLine"
         },
         "raw_files": [{
             "datetime_pattern": "stare_{instrument_serial}_%Y%m%d_%H.hpl",
@@ -70,7 +73,8 @@
     },
     {
         "instrument":{
-            "serial":"26"
+            "serial":"26",
+            "type": "StreamLine"
         },
         "raw_files": [{
             "datetime_pattern": "stare_{instrument_serial}_%Y%m%d_%H.hpl",
@@ -94,7 +98,8 @@
     },
     {
         "instrument":{
-            "serial":"156"
+            "serial":"156",
+            "type": "StreamLine"
         },
         "raw_files": [{
             "datetime_pattern": "stare_{instrument_serial}_%Y%m%d_%H.hpl",
@@ -115,7 +120,8 @@
     },
     {
         "instrument":{
-            "serial":"175"
+            "serial":"175",
+            "type": "StreamLine"
         },
         "raw_files": [{
             "datetime_pattern": "stare_{instrument_serial}_%Y%m%d_%H.hpl",
@@ -139,7 +145,8 @@
     },
     {
         "instrument":{
-            "serial":"204"
+            "serial":"204",
+            "type": "StreamLine"
         },
         "raw_files": [{
             "datetime_pattern": "stare_{instrument_serial}_%Y%m%d_%H.hpl",
@@ -160,7 +167,8 @@
     },
     {
         "instrument":{
-            "serial": "WCS000243"
+            "serial": "WCS000243",
+            "type": "w400s"
         },
         "start_datetime": "2022-06-10T00:00:00",
         "end_datetime": "2024-03-05T10:00:00",
@@ -171,7 +179,8 @@
     },
     {
         "instrument":{
-            "serial": "10"
+            "serial": "10",
+            "type": "WLS70"
         },
         "start_datetime": "2022-06-10T00:00:00",
         "end_datetime": "2024-03-05T10:00:00",
