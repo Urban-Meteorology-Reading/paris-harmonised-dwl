@@ -40,12 +40,12 @@ def range_to_height_adjust(dat, elevation):
 
     Returns
     -------
-    xr.Dataset with height as the vertical dimension instead of range
+    xr.Dataset with height (which is directly above instrument) as the vertical dimension
+    instead of range (which is along the scan line of sight)
 
     """
 
-    dat["height"] = (dat.range * np.sin(np.deg2rad(elevation))
-                     ).rename("height")
+    dat["height"] = (dat.range * np.sin(np.deg2rad(elevation))).rename("height")
     dat = dat.swap_dims({"range": "height"}).drop("range")
 
     return dat
@@ -54,11 +54,10 @@ def range_to_height_adjust(dat, elevation):
 def sea_level_adjust(dat, instrument_sea_level):
 
     if "range" in dat.dims:
-        raise ValueError(
-            "The dataset has (radial) range instead of (vertical) height")
+        raise ValueError("The dataset has (radial) range instead of (vertical) altitude")
 
-    dat = dat.assign_coords(
-        height=(dat.height + instrument_sea_level))
+    dat = dat.assign_coords(height=(dat.height + instrument_sea_level)
+                            ).rename({"height": "altitude"})
 
     return dat
 
@@ -126,7 +125,7 @@ def flag_ws_out_of_range(dat, ws_var_name="horizontal_wind_speed"):
 
 
 def apply_attrs(dat, level: int, vardimdefs=vardimdefs):
-    attr_keys = ['standard_name', 'long_name', 'units', 'comment']
+    attr_keys = ['standard_name', 'long_name', 'units', 'comment', 'reference_geoid']
 
     for var in [*dat.coords, *dat.data_vars]:
         vardimdef = [
@@ -167,17 +166,17 @@ def time_resample(dat, res=600, vardimdefs=vardimdefs):
     return out_dat
 
 
-def height_resample(dat, min_height, max_height, res_height):
-    # if the range coordinate is not int, then there are some issues
-    # so far just assume range coordinate is int or n.5, so use 0.5 res step
-    height_gate_lengths = np.unique(np.round(np.diff(dat.height), 1))
+def z_resample(dat, min_z, max_z, res_z, z_name="altitude"):
+    # if the vertical coordinate is not int, then there are some issues
+    # so far just assume vertical coordinate is int or n.5, so use 0.5 res step
+    height_gate_lengths = np.unique(np.round(np.diff(dat[z_name]), 1))
     if len(height_gate_lengths) > 1:
         raise GateLengthNotIdentical
-    dat = dat.sel(height=slice(0, max_height + (res_height * 2)))
-    dat = dat.reindex(height=np.arange(min_height, max_height, 1),
+    dat = dat.sel({z_name: slice(0, max_z + (res_z * 2))})
+    dat = dat.reindex({z_name: np.arange(min_z, max_z, 1)},
                       method="nearest", tolerance=0.5)
-    dat = dat.interpolate_na(dim="height", max_gap=res_height*2)
-    dat = dat.sel(height=slice(min_height, max_height, res_height))
+    dat = dat.interpolate_na(dim=z_name, max_gap=res_z*2)
+    dat = dat.sel({z_name: slice(min_z, max_z, res_z)})
     if "range" in dat.data_vars:
         dat = dat.drop("range")
 

@@ -3,49 +3,54 @@
     "station":{
     "code":"PASIRT",
     "lat":48.7177,
-    "lon":2.2086
+    "lon":2.2086,
+    "altitude": 154,
+    "height": 0
     }
     },
     {
     "station": {
     "code": "PAARBO",
     "lat": 48.7717,
-    "lon": 2.2677
+    "lon": 2.2677,
+    "altitude": 99,
+    "height": 1
     }
     },
     {
     "station": {
     "code": "PALUPD",
     "lat": 48.8278,
-    "lon": 2.3806
+    "lon": 2.3806,
+    "altitude": 65,
+    "height": 26
     }
     },
     {
       "station": {
     "code": "PAJUSS",
     "lat": 48.8469,
-    "lon": 2.3555
+    "lon": 2.3555,
+    "altitude": 125,
+    "height": 88
     }
     },
     {
     "station": {
     "code": "PACHEM",
     "lat": 48.9047,
-    "lon": 2.4447
-    }
-    },
-    {
-     "station": {
-    "code": "PAARBO",
-    "lat": 48.7717,
-    "lon": 2.2677
+    "lon": 2.4447,
+    "altitude": 98,
+    "height": 52
     }
     },
     {
     "station": {
     "code": "PAROIS",
     "lat": 49.016,
-    "lon": 2.5337
+    "lon": 2.5337,
+    "altitude": 112,
+    "height": 4
     }
     }
 ]

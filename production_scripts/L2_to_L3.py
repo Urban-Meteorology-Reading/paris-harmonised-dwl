@@ -27,19 +27,18 @@ import logging
 # todo: w400s sep 12 retrieval bad aroud midday
 # todo: Sep 26 the timesteps seem off for 30 in L3 product.
 # todo: Dec 7 - 8 L3 not run why
-# todo: change coordinate name from "station_code" to "station"
-# todo: asl_height(station) and lat(station, lon(station) vars
 
 # mostly done or low prio:
-# todo: download 2021 eiffel tower data
-# todo: fine-tune QC for StreamLine based on quicklooks
-# todo: add nsamples?
-# todo: check that wls70 and w400s range gates are middle of gate coord
-# todo: rerun scatter plots with new asl range adjust fix (not + half range gate..)
-# todo: add rain mask from dwl measurements - why?
-
+# todo: download 2021 eiffel tower data - not found
+# todo: add nsamples? - low prio
+# nottodo: add rain mask from dwl measurements - why?
 
 # done:
+# todo: rerun scatter plots with new asl range adjust fix (not + half range gate..)
+# todo: check that wls70 and w400s range gates are middle of gate coord
+# todo: fine-tune QC for StreamLine based on quicklooks - done
+# todo: asl_height(station) and lat(station, lon(station) vars - attrs
+# todo: change coordinate name from "station_code" to "station"
 # todo: remove range data_var and check that height asl is an output 1D (time) data var
 # todo: IMPORTANT: CONVERT RANGE TO VERTICAL HEIGHT ABOVE INSTRUMENT FOR ALL INSTRUMENT TYPES at L2 level
 # todo: IMPORTANT: StreamLine RAW to L1 need to account for different deployments at same date
@@ -76,7 +75,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.16
+__version__ = 1.18
 logging.basicConfig(
     filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
     filemode='a',
@@ -91,11 +90,13 @@ time_aggs = [60*10]
 input_dir = harmonise.L2_BASEDIR
 deployments = harmonise.get_deployments()
 deployments_df = pd.json_normalize(deployments, sep="_")
-stations = np.unique(deployments_df.station_code)
-
+station_codes = np.unique(deployments_df.station_code)
+stations = harmonise.get_stations()
+stations_df = pd.json_normalize(stations, sep="_").rename(
+    columns={"station_code": "station"}).set_index("station")
 
 start_datetime_full = "2023-08-06T00:00:00"
-end_datetime_full = "2024-08-12T00:00:00"
+end_datetime_full = "2023-08-07T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
@@ -109,10 +110,10 @@ for i in range(0, len(datetime_range)-1):
             start_datetime_dt = dt.datetime.fromisoformat(start_datetime)
             end_datetime_dt = dt.datetime.fromisoformat(end_datetime)
             dat_list = []
-            for station in stations:
+            for station_code in station_codes:
                 # find the deployment with matching station code and dates
                 d = deployments_df[
-                    (deployments_df.station_code == station) &
+                    (deployments_df.station_code == station_code) &
                     (start_datetime <= deployments_df.end_datetime) &
                     (end_datetime >= deployments_df.start_datetime)
                 ]
@@ -125,7 +126,7 @@ for i in range(0, len(datetime_range)-1):
 
                 if d.shape[0] == 0:
                     logging.debug(
-                        f"No deployment for {station} "
+                        f"No deployment for {station_code} "
                         f"{start_datetime} - {end_datetime}"
                     )
                     continue
@@ -145,7 +146,7 @@ for i in range(0, len(datetime_range)-1):
 
                 if len(filenames) == 0:
                     logging.info(
-                        f"{station}({d.instrument_serial.item()}) "
+                        f"{station_code}({d.instrument_serial.item()}) "
                         f"{start_datetime_dt.strftime('%Y%m%d %H')}->"
                         f"{end_datetime_dt.strftime('%Y%m%d %H')} no files found"
                     )
@@ -155,35 +156,36 @@ for i in range(0, len(datetime_range)-1):
                 dat = dat.sel(time=slice(start_datetime_dt, end_datetime_dt))
                 if len(dat.time) == 0:
                     logging.info(
-                        f"{station}({d.instrument_serial.item()}) "
+                        f"{station_code}({d.instrument_serial.item()}) "
                         f"{start_datetime.strip(' 00:00:00')} -> "
                         f"{end_datetime.strip(' 00:00:00')} no files found"
                     )
                     continue
                 dat = harmonise.sea_level_adjust(
-                    dat, d.above_sea_level_height.item())
-                dat = harmonise.height_resample(
-                    dat, harmonise.MIN_HEIGHT, harmonise.MAX_HEIGHT,
-                    harmonise.RES_HEIGHT)
+                    dat, d.above_sea_level_m.item())
+                dat = harmonise.z_resample(
+                    dat, harmonise.MIN_ALTITUDE, harmonise.MAX_ALTITUDE,
+                    harmonise.RES_ALTITUDE)
                 dat = harmonise.time_resample(dat, time_agg)
                 ws, wd = harmonise.vector_to_ws_wd(dat.u.values, dat.v.values)
-                dat = dat.assign(ws=(["time", "height"], ws),
-                                 wd=(["time", "height"], wd))
-                # appropriate unless multiple system IDs in one file interval (maybe)
-                # regardless, an exception for that is raised earlier. so I will be able
-                # to check that if it happen
-                dat = harmonise.add_system_id_var(
-                    dat, d.instrument_serial.item())
+                dat = dat.assign(ws=(["time", "altitude"], ws),
+                                 wd=(["time", "altitude"], wd))
+                # inappropriate if multiple system IDs in one file interval
+                # regardless, an exception for that is raised earlier
+                dat = harmonise.add_system_id_var(dat, d.instrument_serial.item())
                 dat = dat.expand_dims(dim="station").assign_coords(
-                    station=("station", [station]))
-                dat = harmonise.apply_attrs(dat, level=3)
-                dat.time.attrs["comment"] = dat.time.attrs["comment"].format(
-                    time_window_s=time_agg)
+                    station=("station", [station_code]))
+                # dat = harmonise.apply_attrs(dat, level=3)
                 dat_list.append(dat.load())
             if not dat_list:
                 continue
 
             dat_out = xr.concat(dat_list, dim="station")
+            # add meta data for station dimension (var(station))
+            dat_out = dat_out.merge(xr.Dataset.from_dataframe(stations_df))
+            dat_out = harmonise.apply_attrs(dat_out, level=3)
+            dat_out.time.attrs["comment"] = dat_out.time.attrs["comment"].format(
+                time_window_s=time_agg)
 
             nc_file = "{product_name}V{version}_{start_time}_{end_time}_{time_agg}s.nc".format(
                 product_name=product_name,

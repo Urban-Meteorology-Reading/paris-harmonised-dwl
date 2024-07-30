@@ -162,17 +162,18 @@ vardimdefs = [
         "name": "time",
         "standard_name": "time",
         "comment":  (
-                'Label represents end of {time_window_s} s interval.'
+                'End of aggregation interval (interval length: {time_window_s} s).'
         ),
     },
     {
         "level": 3,
         "type": "dimension",
-        "name": "height",
-        "long_name": "height_above_mean_sea_level",
+        "name": "altitude",
+        "standard_name": "altitude",
         "units": "m",
+        "reference_geoid": "EGM96",
         "comment":  (
-                'Height of centre of range gate above mean sea level.'
+                'Altitude of centre of range gate above sea level.'
         ),
     },
     {
@@ -181,9 +182,7 @@ vardimdefs = [
         "name": "station",
         "long_name": "station",
         "units": "m",
-        "comment":  (
-                'The station code that uniquely identifies the measurement station.'
-        ),
+        "comment": 'The station code that uniquely identifies the measurement station.',
     },
     {
         "level": 3,
@@ -191,6 +190,45 @@ vardimdefs = [
         "name": "system_id",
         "long_name": "system_unique_id",
         "units": defs.UNITLESS_UNITS,
-        "comment":  ('The specific system (instrument) currently deployed '),
+        "comment":  'The specific system (instrument) currently deployed ',
+    },
+    {
+        "level": 3,
+        "type": "variable",
+        "name": "station_lat",
+        "standard_name": "latitude",
+        "units": "degrees_north",
+        "comment":  'The decimal latitude of the measurement station',
+    },
+    {
+        "level": 3,
+        "type": "variable",
+        "name": "station_lon",
+        "standard_name": "longitude",
+        "units": "degrees_east",
+        "comment": 'The decimal longitude of the measurement station',
+    },
+    {
+        "level": 3,
+        "type": "variable",
+        "name": "station_height",
+        "standard_name": "height",
+        "units": "m",
+        "comment": (
+            'The measurement station height above ground level. The "ground level" '
+            'surface is the street level. e.g. if the station is on a rooftop, then the '
+            'height is the building rooftop height above street level.'
+        )
+    },
+    {
+        "level": 3,
+        "type": "variable",
+        "name": "station_altitude",
+        "standard_name": "altitude",
+        "units": "m",
+        "reference_geoid": "EGM96",
+        "comment": (
+            'The measurement station height above sea level.'
+        )
     },
 ]

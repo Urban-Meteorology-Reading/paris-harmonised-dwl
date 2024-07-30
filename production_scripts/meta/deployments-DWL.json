@@ -14,7 +14,7 @@
         ],
         "start_datetime": "1999-01-01T14:45:00",
         "end_datetime": "1999-01-01T14:45:00",
-        "above_sea_level_height": 154,
+        "above_sea_level_m": 154,
         "do_bg_corr": true,
         "station": {
         "code": "PASIRT"
@@ -38,7 +38,7 @@
         },
         "start_datetime": "2022-12-07T14:45:00",
         "end_datetime": "2023-12-12T01:00:00",
-        "above_sea_level_height": 112,
+        "above_sea_level_m": 112,
         "do_bg_corr": true,
         "station": {
         "code": "PAROIS"
@@ -62,7 +62,7 @@
         },
         "start_datetime": "2022-06-13T01:00:00",
         "end_datetime": "2022-12-07T14:45:00",
-        "above_sea_level_height": 112,
+        "above_sea_level_m": 112,
         "do_bg_corr": true,
         "station": {
         "code": "PAROIS"
@@ -86,7 +86,7 @@
         },
         "start_datetime": "2023-06-13T11:00:00",
         "end_datetime": "2024-02-07T09:00:00",
-        "above_sea_level_height": 65,
+        "above_sea_level_m": 65,
         "do_bg_corr": true,
         "station": {
         "code": "PALUPD"
@@ -107,7 +107,7 @@
         ],
         "start_datetime": "2023-08-06T16:14:00",
         "end_datetime": "2023-09-13T08:40:00",
-        "above_sea_level_height": 99,
+        "above_sea_level_m": 99,
         "do_bg_corr": false,
         "station": {
         "code": "PAARBO"
@@ -131,7 +131,7 @@
         },
         "start_datetime": "2023-08-06T15:14:00",
         "end_datetime": "2024-03-04T13:00:00",
-        "above_sea_level_height": 98,
+        "above_sea_level_m": 98,
         "do_bg_corr": true,
         "station": {
         "code": "PACHEM"
@@ -152,7 +152,7 @@
         ],
         "start_datetime": "2023-11-13T19:00:00",
         "end_datetime": "2024-03-05T10:00:00",
-        "above_sea_level_height": 99,
+        "above_sea_level_m": 99,
         "do_bg_corr": true,
         "station": {
         "code": "PAARBO"
@@ -164,7 +164,7 @@
         },
         "start_datetime": "2022-06-10T00:00:00",
         "end_datetime": "2024-03-05T10:00:00",
-        "above_sea_level_height": 125,
+        "above_sea_level_m": 125,
         "station": {
         "code": "PAJUSS"
         }
@@ -175,7 +175,7 @@
         },
         "start_datetime": "2022-06-10T00:00:00",
         "end_datetime": "2024-03-05T10:00:00",
-        "above_sea_level_height": 154,
+        "above_sea_level_m": 154,
         "station": {
         "code": "PASIRT"
         }
