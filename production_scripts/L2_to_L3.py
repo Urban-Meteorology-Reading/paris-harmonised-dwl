@@ -16,7 +16,6 @@ import logging
 
 # todo: expand and fill arrays to give continuous dataset filled with na where no data
 # todo: add system_is_deployed boolean flag
-# todo: add L2 versions to L2 atts
 # todo: add L3 attrs
 # todo: Figure out how to handle concurrent station deployments error for 2022-12-07 00:00:00 - 2022-12-08 00:00:00
 # todo: DATA_AVAILABILITY_SUSPECT_WARN_THRESHOLD = 75 wls70 - check if that's reasonable. see e.g. Jul 12 2022. Top of BL is lost.
@@ -26,9 +25,13 @@ import logging
 # todo: Sep 26 the timesteps seem off for 30 in L3 product.
 # todo: Dec 7 - 8 L3 not run why
 
+
+# todo low prio
+# todo: add L2 versions to L2 atts
+
 logger = logging.getLogger(__name__)
 
-__version__ = 1.18
+__version__ = 1.2
 logging.basicConfig(
     filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
     filemode='a',
@@ -139,6 +142,22 @@ for i in range(0, len(datetime_range)-1):
             dat_out = harmonise.apply_attrs(dat_out, level=3)
             dat_out.time.attrs["comment"] = dat_out.time.attrs["comment"].format(
                 time_window_s=time_agg)
+
+            attrs = {
+                "title": "Harmonised boundary layer wind profile dataset from six ground-based doppler wind lidars across Paris, France",
+                "creator_name": "William Morrison (williamtjmorrison@gmail.com)",
+                "creator_institution": "Environmental Meteorology, Institute of Earth and Environmental Sciences, Faculty of Environment and Natural Resources, University of Freiburg, Freiburg, 79085, Germany",
+                "principal_investigator": "Andreas Christen (andreas.christen@meteo.uni-freiburg.de)",
+                "metadata_doi": "ESSC_DOI",
+                "processing_level": "Level 3 (L3): Raw data converted to L1 then QAQC at L2 then harmonisation at L3.",
+                "processing_name": "L2_to_L3.py",
+                "processing_version": __version__,
+                "processing_url": "https://github.com/willmorrison1/paris-harmonised-dwl, https://github.com/Urban-Meteorology-Reading/paris-harmonised-dwl",
+                "processing_date": dt.datetime.now(tz=dt.timezone.utc).isoformat(),
+                "start_time_utc": start_datetime,
+                "end_time_utc": end_datetime,
+                "aggreagtion_time_s": time_agg,
+            }
 
             nc_file = "{product_name}V{version}_{start_time}_{end_time}_{time_agg}s.nc".format(
                 product_name=product_name,
