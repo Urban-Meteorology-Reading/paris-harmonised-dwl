@@ -19,7 +19,7 @@ PRODUCT_NAME = "w400s_L1a"
 OUTPUT_FILE = f"{PRODUCT_NAME}_%Y%m%d_%H%M%S_{SYSTEM_SERIAL}.nc"
 ELEVATION_ANGLE = 75  # the elevation angle of the DBS scan
 PRODUCT_LEVEL = 2
-__version__ = 1.1
+__version__ = 1.2
 
 
 def gate_index_to_range(ds):
@@ -34,7 +34,7 @@ def gate_index_to_range(ds):
     return ds
 
 
-def w400s_apply_pre_aggregation_qc(dat, std_window="15min",
+def w400s_apply_pre_aggregation_qc(dat, std_window="6min",
                                    std_threshold=3,
                                    fraction_above_std_threshold=0.25):
     """
@@ -66,9 +66,11 @@ def w400s_apply_pre_aggregation_qc(dat, std_window="15min",
     wind_speed_status_invalid = dat.wind_speed_status != 1
     dat["u"] = dat["u"].where(~wind_speed_status_invalid)
     dat["v"] = dat["v"].where(~wind_speed_status_invalid)
+    # get the std across the time window (for each range gate)
     u_std_window = dat.u.resample(time=std_window).std() > std_threshold
     v_std_window = dat.u.resample(time=std_window).std() > std_threshold
     uv_std = (u_std_window | v_std_window)
+    # get the fraction of range gates that are above the std threshold
     uv_std_f = (uv_std.sum(dim="range") / uv_std.count(dim="range"))
     uv_std_threshold = uv_std_f.reindex_like(
         dat, method="nearest") > fraction_above_std_threshold
@@ -146,6 +148,7 @@ def main():
 
     files = glob(os.path.join(harmonise.L1_BASEDIR,
                               SYSTEM_SERIAL, INPUT_FILENAME_GSUB))
+    files = ['D:/Urbisphere/sandbox/data/L1/by-serialnr/France/Paris/WCS000243\\w400s_1a_LqualairLzamIdbs_v01_20230713_000000_1440.nc']
     for file in files:
         file_date = dt.strptime(os.path.basename(file), INPUT_FILE_DT)
         dat = xr.load_dataset(file)
@@ -169,7 +172,7 @@ def main():
         if not os.path.exists(os.path.dirname(out_dir)):
             os.makedirs(os.path.dirname(out_dir), exist_ok=True)
         print(out_dir)
-
+        dat.flag_suspect_retrieval_warn.plot(y="height")
         dat.to_netcdf(
             out_dir, encoding=harmonise.encode_nc_compression(dat))
 

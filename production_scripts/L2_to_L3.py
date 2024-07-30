@@ -15,19 +15,20 @@ import xarray as xr
 import logging
 
 # todo: expand and fill arrays to give continuous dataset filled with na where no data
-# todo: add system_is_deployed boolean flag
-# todo: add L3 attrs
 # todo: Figure out how to handle concurrent station deployments error for 2022-12-07 00:00:00 - 2022-12-08 00:00:00
 # todo: DATA_AVAILABILITY_SUSPECT_WARN_THRESHOLD = 75 wls70 - check if that's reasonable. see e.g. Jul 12 2022. Top of BL is lost.
 # todo: Jul 13 morning w400s std full profile threhsold has removed a "good" set of profiles
-# todo: w400s go over "uv_std_threshold" again. why are there stripes in the flag_suspect_removal. also after oct 4 2022 w400s there is a change in scan and some of the wind proifles are filtered  - check sd filter
+# todo: w400s go over "uv_std_threshold" again. why are there stripes in the flag_suspect_removal. also after oct 4 2022 w400s there is a change in scan and some of the wind pofiles are filtered - check sd filter
 # todo: w400s sep 12 retrieval bad aroud midday
 # todo: Sep 26 the timesteps seem off for 30 in L3 product.
-# todo: Dec 7 - 8 L3 not run why
-
+# todo: Dec 7 - 8 L3 not run why?
+# todo: Aug 8 and 9 2023 not processed L3 why? 16:06:06,288 root ERROR Resulting object does not have monotonic global indexes along dimension height error for 2023-08-08 00:00:00 - 2023-08-09 00:00:00
+# s/n 30 ['D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/30\\streamLine_L2_V1.12_20230807_000000_30.nc', 'D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/30\\streamLine_L2_V1.12_20230808_000000_30.nc']
 
 # todo low prio
 # todo: add L2 versions to L2 atts
+# todo: add system_is_deployed boolean flag
+# todo: add L3 attrs
 
 logger = logging.getLogger(__name__)
 
@@ -51,8 +52,8 @@ stations = harmonise.get_stations()
 stations_df = pd.json_normalize(stations, sep="_").rename(
     columns={"station_code": "station"}).set_index("station")
 
-start_datetime_full = "2023-08-06T00:00:00"
-end_datetime_full = "2023-08-07T00:00:00"
+start_datetime_full = "2023-08-08T00:00:00"
+end_datetime_full = "2024-01-01T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
