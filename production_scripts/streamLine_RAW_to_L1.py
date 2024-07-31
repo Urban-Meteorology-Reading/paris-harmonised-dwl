@@ -35,6 +35,9 @@ program_summary = (
     f"https://github.com/actris-cloudnet/halo-reader version {__haloreader_version__} "
     f"with code available on https://github.com/willmorrison1/paris-harmonised-dwl"
 )
+# todo
+# what is the expected scan elevation? reject scans if scan angle is not np.close
+EXPECTED_SCAN_ELEVATION = 75
 
 
 def build_compression_dict(xr_ds):

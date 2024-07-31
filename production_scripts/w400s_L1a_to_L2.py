@@ -19,7 +19,7 @@ PRODUCT_NAME = "w400s_L1a"
 OUTPUT_FILE = f"{PRODUCT_NAME}_%Y%m%d_%H%M%S_{SYSTEM_SERIAL}.nc"
 ELEVATION_ANGLE = 75  # the elevation angle of the DBS scan
 PRODUCT_LEVEL = 2
-__version__ = 1.27
+__version__ = 1.29
 
 
 def gate_index_to_range(ds):
@@ -34,7 +34,7 @@ def gate_index_to_range(ds):
     return ds
 
 
-def w400s_apply_pre_aggregation_qc(dat, std_window="5min",
+def w400s_apply_pre_aggregation_qc(dat, std_window="30s",
                                    fraction_above_maxws_threshold=0.01):
     """
 
@@ -105,7 +105,7 @@ def w400s_flag_suspect_retrieval_removed(dat):
 def w400s_flag_suspect_retrieval_warn(dat):
     ws_threshold_warn = (dat.flag_ws_threshold_invalid_pc > 0) &\
         (dat.flag_ws_threshold_invalid_pc < 100)
-    flag_wind_speed_status_warn = (dat.flag_wind_speed_status_invalid_pc > 0) &\
+    flag_wind_speed_status_warn = (dat.flag_wind_speed_status_invalid_pc > 80) &\
         (dat.flag_wind_speed_status_invalid_pc < 100)
     flag_ws_out_of_range_warn = (dat.flag_ws_out_of_range_pc > 0) &\
         (dat.flag_ws_out_of_range_pc < 100)
