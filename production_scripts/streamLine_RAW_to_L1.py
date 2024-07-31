@@ -23,7 +23,7 @@ from meta import filemeta
 import fnmatch
 from haloreader import __version__ as __haloreader_version__
 
-__version__ = "2.16"
+__version__ = "2.17"
 
 author = "William Morrison"
 
@@ -172,11 +172,11 @@ parser = argparse.ArgumentParser(description="Process start and end dates.")
 parser.add_argument("-s", "--startdate",
                     help="Start date in format YYYY-MM-DD",
                     type=valid_date,
-                    default='2023-09-01')
+                    default='2023-02-17')
 parser.add_argument("-e", "--enddate",
                     help="End date in format YYYY-MM-DD",
                     type=valid_date,
-                    default='2023-09-14')
+                    default='2023-02-17')
 
 args = parser.parse_args()
 
@@ -310,6 +310,7 @@ for date in dates:
                     min_valid_intensity=min_valid_intensity_threshold_wind,
                     elevation_expected_value=EXPECTED_SCAN_ELEVATION)
                 xr_dat = to_xarray(wind)
+                xr_dat = xr_dat.sel(time=slice(start_date, end_date))
                 prod_date = dt.datetime.now(dt.timezone.utc).isoformat()
                 attrs = {
                     "production_program": PROGRAM_NAME,
@@ -317,6 +318,7 @@ for date in dates:
                     "production_date": prod_date,
                     "production_comment": program_summary,
                     "production_author": author,
+                    "production_url": "https://github.com/willmorrison1/halo-reader, https://github.com/willmorrison1/paris-harmonised-dwl/",
                 }
                 xr_dat.attrs = attrs
 

@@ -16,14 +16,9 @@ import logging
 
 # todo: expand and fill arrays to give continuous dataset filled with na where no data
 # todo: Figure out how to handle concurrent station deployments error for 2022-12-07 00:00:00 - 2022-12-08 00:00:00
-# todo: 20230903 to check this: w400s go over "uv_std_threshold" again. why are there stripes in the flag_suspect_removal. also after oct 4 2022 w400s there is a change in scan and some of the wind pofiles are filtered - check sd filter
 # todo: w400s sep 12 retrieval bad aroud midday
-# todo: StreamLine scan elevation check is np.close to 75. in compute_wind() add kwarg for manual elevation.
-
 # todo: Sep 26 the timesteps seem off for 30 in L3 product.
 # todo: Dec 7 - 8 L3 not run why?
-# todo: Aug 8 and 9 2023 not processed L3 why? 16:06:06,288 root ERROR Resulting object does not have monotonic global indexes along dimension height error for 2023-08-08 00:00:00 - 2023-08-09 00:00:00
-# s/n 30 ['D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/30\\streamLine_L2_V1.12_20230807_000000_30.nc', 'D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/30\\streamLine_L2_V1.12_20230808_000000_30.nc']
 
 
 # todo low prio
@@ -32,18 +27,23 @@ import logging
 # todo: add L3 attrs
 
 # todo done
+# todo: Aug 8 and 9 2023 not processed L3 why? 16:06:06,288 root ERROR Resulting object does not have monotonic global indexes along dimension height error for 2023-08-08 00:00:00 - 2023-08-09 00:00:00
+# todo: 09:12:18,829 root ERROR Resulting object does not have monotonic global indexes along dimension height error for 2022-08-06 00:00:00 - 2022-08-07 00:00:00
 # todo: DATA_AVAILABILITY_SUSPECT_WARN_THRESHOLD = 75 wls70 - check if that's reasonable. see e.g. Jul 12 2022. Top of BL is lost.
-
+# s/n 30 ['D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/30\\streamLine_L2_V1.12_20230807_000000_30.nc', 'D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/30\\streamLine_L2_V1.12_20230808_000000_30.nc']
 # todo: Jul 13 morning w400s std full profile threhsold has removed a "good" set of profiles
 # todo: w400s Jun 22 2022 bad retrieval
+# todo: StreamLine scan elevation check is np.close to 75. in compute_wind() add kwarg for manual elevation.
+# todo: 20230903 to check this: w400s go over "uv_std_threshold" again. why are there stripes in the flag_suspect_removal. also after oct 4 2022 w400s there is a change in scan and some of the wind pofiles are filtered - check sd filter
+
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.3
+__version__ = 1.31
 l2_versions = {
-    "StreamLine": "V1.12",
+    "StreamLine": "V1.14",
     "WLS70": "V1.21",
-    "w400s": "V1.28",
+    "w400s": "V1.29",
 }
 logging.basicConfig(
     filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
@@ -66,7 +66,7 @@ stations_df = pd.json_normalize(stations, sep="_").rename(
 
 
 start_datetime_full = "2022-06-14T00:00:00"
-end_datetime_full = "2024-03-31T00:00:00"
+end_datetime_full = "2022-07-01T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
