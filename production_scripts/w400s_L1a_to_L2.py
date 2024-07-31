@@ -34,7 +34,7 @@ def gate_index_to_range(ds):
     return ds
 
 
-def w400s_apply_pre_aggregation_qc(dat, std_window="30s",
+def w400s_apply_pre_aggregation_qc(dat, stat_window="30s",
                                    fraction_above_maxws_threshold=0.01):
     """
 
@@ -46,13 +46,10 @@ def w400s_apply_pre_aggregation_qc(dat, std_window="30s",
         Flag the suspect retrievals that need removing, remove them in the u
         and v components, then return the dataset with the removed data and
         the new flag
-    std_window: The time window for stdev calculation for suspect retrieval
-        evaluation
-    std_threshold: Values over std_threshold in std_window are considered
-        suspect retrieval
-    fraction_above_std_threshold: if std_threshold is passed more than
-        std_threshold in the entire std_window, flag the entire time window
-        (with std_window resolution) as flag_suspect_retrieval_removed
+    stat_window: The time window for evaluating suspect retrievals
+    fraction_above_maxws_threshold: if max_ws is passed more than
+        fraction_above_maxws_threshold in the entire stat_window, flag the entire time window
+        (with stat_window resolution) as flag_suspect_retrieval_removed
 
     Returns
     -------
@@ -66,8 +63,8 @@ def w400s_apply_pre_aggregation_qc(dat, std_window="30s",
     dat["u"] = dat["u"].where(~wind_speed_status_invalid)
     dat["v"] = dat["v"].where(~wind_speed_status_invalid)
     # get the std across the time window (for each range gate)
-    median_u = dat.u.resample(time=std_window).median()
-    median_v = dat.v.resample(time=std_window).median()
+    median_u = dat.u.resample(time=stat_window).median()
+    median_v = dat.v.resample(time=stat_window).median()
     median_ws = (np.sqrt(median_u**2 + median_v**2))
     median_ws_threshold = median_ws > harmonise.MAX_VALID_WS
     # v_std_window = std_v > std_threshold

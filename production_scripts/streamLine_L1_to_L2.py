@@ -12,7 +12,7 @@ from datetime import datetime as dt
 import harmonise
 import numpy as np
 
-__version__ = 1.12
+__version__ = 1.13
 
 # gates lower than INVALID_LOW_RANGE_GATE_M are rejected
 INVALID_LOW_RANGE_GATE_M = 45
@@ -30,7 +30,7 @@ INTENSITY_VALID_WARN = 1.007585
 # individual scan has mean intensity < INTENSITY_VALID_ERR ? flag err and reject
 INTENSITY_VALID_ERR = 1.0055
 
-L1_version = "2.14"
+L1_version = "2.16"
 INPUT_FILENAME_GSUB = f"*/halo-reader_WIND_????????_*{L1_version}.nc"
 PRODUCT_NAME = "streamLine"
 PRODUCT_LEVEL = 2

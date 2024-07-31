@@ -65,8 +65,8 @@ stations_df = pd.json_normalize(stations, sep="_").rename(
     columns={"station_code": "station"}).set_index("station")
 
 
-start_datetime_full = "2022-06-23T00:00:00"
-end_datetime_full = "2024-06-24T00:00:00"
+start_datetime_full = "2022-06-14T00:00:00"
+end_datetime_full = "2024-03-31T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)

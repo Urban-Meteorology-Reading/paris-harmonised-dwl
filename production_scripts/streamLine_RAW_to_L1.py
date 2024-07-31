@@ -23,7 +23,7 @@ from meta import filemeta
 import fnmatch
 from haloreader import __version__ as __haloreader_version__
 
-__version__ = "2.14"
+__version__ = "2.16"
 
 author = "William Morrison"
 
@@ -307,7 +307,8 @@ for date in dates:
                     continue
                 wind = halo.compute_wind(
                     halobg=halobg if do_bg_corr else None,
-                    min_valid_intensity=min_valid_intensity_threshold_wind)
+                    min_valid_intensity=min_valid_intensity_threshold_wind,
+                    elevation_expected_value=EXPECTED_SCAN_ELEVATION)
                 xr_dat = to_xarray(wind)
                 prod_date = dt.datetime.now(dt.timezone.utc).isoformat()
                 attrs = {
