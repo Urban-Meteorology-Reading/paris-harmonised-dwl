@@ -19,7 +19,7 @@ PRODUCT_NAME = "w400s_L1a"
 OUTPUT_FILE = f"{PRODUCT_NAME}_%Y%m%d_%H%M%S_{SYSTEM_SERIAL}.nc"
 ELEVATION_ANGLE = 75  # the elevation angle of the DBS scan
 PRODUCT_LEVEL = 2
-__version__ = 1.29
+__version__ = 1.31
 
 
 def gate_index_to_range(ds):
@@ -34,8 +34,9 @@ def gate_index_to_range(ds):
     return ds
 
 
-def w400s_apply_pre_aggregation_qc(dat, stat_window="30s",
-                                   fraction_above_maxws_threshold=0.01):
+def w400s_apply_pre_aggregation_qc(dat, stat_window="240s",
+                                   fraction_above_ws_threshold=0.25,
+                                   ws_max_abs_diff=15):
     """
 
 
@@ -47,9 +48,9 @@ def w400s_apply_pre_aggregation_qc(dat, stat_window="30s",
         and v components, then return the dataset with the removed data and
         the new flag
     stat_window: The time window for evaluating suspect retrievals
-    fraction_above_maxws_threshold: if max_ws is passed more than
-        fraction_above_maxws_threshold in the entire stat_window, flag the entire time window
-        (with stat_window resolution) as flag_suspect_retrieval_removed
+    fraction_above_ws_threshold: if ws_max_abs_diff is passed more than
+        fraction_above_maxws_threshold in the entire stat_window and flag the entire time window
+         as flag_suspect_retrieval_removed
 
     Returns
     -------
@@ -62,26 +63,22 @@ def w400s_apply_pre_aggregation_qc(dat, stat_window="30s",
     wind_speed_status_invalid = dat.wind_speed_status != 1
     dat["u"] = dat["u"].where(~wind_speed_status_invalid)
     dat["v"] = dat["v"].where(~wind_speed_status_invalid)
-    # get the std across the time window (for each range gate)
-    median_u = dat.u.resample(time=stat_window).median()
-    median_v = dat.v.resample(time=stat_window).median()
-    median_ws = (np.sqrt(median_u**2 + median_v**2))
-    median_ws_threshold = median_ws > harmonise.MAX_VALID_WS
-    # v_std_window = std_v > std_threshold
-    # uv_std = (u_std_window | v_std_window)
-    # get the fraction of range gates that are above the std threshold
-    ws_f = (median_ws_threshold.sum(dim="range") / median_u.count(dim="range"))
-    ws_threshold = ws_f.reindex_like(
-        dat, method="nearest") > fraction_above_maxws_threshold
+    dat["horizontal_wind_speed"] = dat["horizontal_wind_speed"].where(
+        ~wind_speed_status_invalid)
+    ws_min = dat.horizontal_wind_speed.resample(time=stat_window).min()
+    ws_max = dat.horizontal_wind_speed.resample(time=stat_window).max()
+    ws_surpasses_threshold = (np.abs(ws_min - ws_max) > ws_max_abs_diff)
+    ws_f = (ws_surpasses_threshold.sum(dim="range") / ws_max.count(dim="range"))
+    ws_threshold = ws_f.reindex_like(dat, method="nearest") > fraction_above_ws_threshold
 
-    suspect_retrieval_removed = wind_speed_status_invalid
+    ci_threshold = dat.wind_speed_ci < 100
+    suspect_retrieval_removed = wind_speed_status_invalid | ci_threshold
     suspect_retrieval_removed[ws_threshold] = True
     dat["u"] = dat["u"].where(~suspect_retrieval_removed)
     dat["v"] = dat["v"].where(~suspect_retrieval_removed)
     dat["flag_wind_speed_status_invalid"] = wind_speed_status_invalid.rename(
         "flag_wind_speed_status_invalid")
-    dat["flag_ws_threshold_invalid"] = ws_threshold.rename(
-        "flag_ws_threshold_invalid")
+    dat["flag_ws_threshold_invalid"] = ws_threshold.rename("flag_ws_threshold_invalid")
     dat = harmonise.flag_ws_out_of_range(dat)
 
     return dat
