@@ -17,7 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.33
+__version__ = 1.34
 l2_versions = {
     "StreamLine": "1.14",
     "WLS70": "1.21",
@@ -41,10 +41,11 @@ station_codes = np.unique(deployments_df.station_code)
 stations = harmonise.get_stations()
 stations_df = pd.json_normalize(stations, sep="_").rename(
     columns={"station_code": "station"}).set_index("station")
-
+paper_doi = "(paper in prep)"
+metadata_doi = "(metadata documentation in prep)"
 
 start_datetime_full = "2022-06-14T00:00:00"
-end_datetime_full = "2022-07-01T00:00:00"
+end_datetime_full = "2024-03-14T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
@@ -142,10 +143,11 @@ for i in range(0, len(datetime_range)-1):
                 "creator_name": "William Morrison (william.morrison@meteo.uni-freiburg.de, williamtjmorrison@gmail.com)",
                 "creator_institution": "Environmental Meteorology, Institute of Earth and Environmental Sciences, Faculty of Environment and Natural Resources, University of Freiburg, Freiburg, 79085, Germany",
                 "principal_investigator": "Andreas Christen (andreas.christen@meteo.uni-freiburg.de)",
-                "metadata_doi": "ESSC_DOI",
-                "processing_level": "Level 3 (L3): Raw data converted to L1 then QAQC at L2 then harmonisation at L3. Consult metadata_doi for details.",
+                "metadata_doi": f"paper: {paper_doi}. metadata: {metadata_doi}",
+                "processing_level": "L3",
+                "processing_level_description": f"Level 3 (L3): Raw observed data files are converted to L1. QAQC applied at L2. Individual files combined and harmonised at L3. Consult corresponding paper {paper_doi} for details.",
                 "processing_name": "L2_to_L3.py",
-                "processing_version_L3": __version__,
+                "processing_version_L3": str(__version__),
                 "processing_version_L2": str(l2_versions),
                 "processing_url": "https://github.com/willmorrison1/paris-harmonised-dwl, https://github.com/Urban-Meteorology-Reading/paris-harmonised-dwl",
                 "processing_time_utc": dt.datetime.now(tz=dt.timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
@@ -153,6 +155,7 @@ for i in range(0, len(datetime_range)-1):
                 "end_time_utc": end_datetime,
                 "aggregation_time_s": time_agg,
             }
+
             dat_out.attrs = attrs
 
             nc_file = "{product_name}V{version}_{start_time}_{end_time}_{time_agg}s.nc".format(

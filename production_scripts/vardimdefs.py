@@ -67,7 +67,7 @@ vardimdefs = [
         "units": "%",
         "comment": (
             'The scan is suspect based on tests unique to each system model. '
-            'Use retreival with caution. Missing values indicate no test.'
+            'Use retreival with caution. Missing values indicate no QC test performed.'
         ),
     },
     {
@@ -141,8 +141,7 @@ vardimdefs = [
         "standard_name": "wind_speed",
         "units": defs.WS_UNITS,
         "comment":  (
-            'Horizontal wind speed calculated from the eastward_wind and '
-            'northward_wind wind components.'
+            'Horizontal wind speed calculated from eastward_wind and northward_wind.'
         ),
     },
     {
@@ -153,7 +152,7 @@ vardimdefs = [
         "units": defs.WS_UNITS,
         "comment":  (
             'Horizontal wind direction clockwise from true north, calculated '
-            'from the eastward_wind and northward_wind wind components.'
+            'from eastward_wind and northward_wind.'
         ),
     },
     {
@@ -182,7 +181,7 @@ vardimdefs = [
         "name": "station",
         "long_name": "station",
         "units": "m",
-        "comment": 'The station code that uniquely identifies the measurement station.',
+        "comment": 'The code that uniquely identifies the measurement station.',
     },
     {
         "level": 3,
@@ -190,7 +189,9 @@ vardimdefs = [
         "name": "system_id",
         "long_name": "system_unique_id",
         "units": defs.UNITLESS_UNITS,
-        "comment":  'The specific system (instrument) currently deployed ',
+        "comment":  (
+            'The specific system (instrument) currently deployed at the measurement station'
+        ),
     },
     {
         "level": 3,
