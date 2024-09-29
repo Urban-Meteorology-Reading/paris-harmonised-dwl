@@ -19,7 +19,7 @@ PRODUCT_NAME = "w400s_L1a"
 OUTPUT_FILE = f"{PRODUCT_NAME}_%Y%m%d_%H%M%S_{SYSTEM_SERIAL}.nc"
 ELEVATION_ANGLE = 75  # the elevation angle of the DBS scan
 PRODUCT_LEVEL = 2
-__version__ = 1.31
+__version__ = "1.32"
 
 
 def gate_index_to_range(ds):
@@ -159,6 +159,9 @@ def main():
         dat = w400s_flag_suspect_retrieval_warn(dat)
         dat = w400s_flag_ws_out_of_range(dat)
         dat = harmonise.select_preharmonisation_data_vars(dat)
+        dat.attrs = {"production_level": PRODUCT_LEVEL,
+                     "production_version": __version__,
+                     }
         OUTPUT_FILE = harmonise.PRODUCT_FILENAME_TEMPLATE.format(
             product_name=PRODUCT_NAME, product_level=PRODUCT_LEVEL,
             product_version=__version__, system_serial=SYSTEM_SERIAL)

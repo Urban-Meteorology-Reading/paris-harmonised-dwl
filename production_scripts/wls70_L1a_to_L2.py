@@ -23,7 +23,7 @@ INPUT_FILE_DT = "wlscerea_1a_windLz1Lb87M10mn-HR_v02_%Y%m%d_%H%M%S_1440.nc"
 PRODUCT_NAME = "wls70"
 SYSTEM_SERIAL = "10"
 PRODUCT_LEVEL = 2
-__version__ = 1.21
+__version__ = "1.22"
 
 
 def wls70_flag_suspect_retrieval_warn_and_removed(dat):

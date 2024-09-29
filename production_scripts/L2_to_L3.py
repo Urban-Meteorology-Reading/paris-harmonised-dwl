@@ -36,11 +36,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.32
+__version__ = 1.33
 l2_versions = {
-    "StreamLine": "V1.14",
-    "WLS70": "V1.21",
-    "w400s": "V1.31",
+    "StreamLine": "1.14",
+    "WLS70": "1.21",
+    "w400s": "1.32",
 }
 logging.basicConfig(
     filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
@@ -120,6 +120,8 @@ for i in range(0, len(datetime_range)-1):
                     )
                     continue
                 dat = xr.open_mfdataset(filenames)
+                if not str(dat.attrs['production_version']) == str(l2_version):
+                    raise ValueError("Product version mismatch")
                 dat = dat.sel(time=slice(start_datetime_dt, end_datetime_dt))
                 if len(dat.time) == 0:
                     logging.info(
