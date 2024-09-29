@@ -81,6 +81,9 @@ def prepare_harmonisation(file):
     elevation = wls70_get_scan_elevation(dat)
     dat = harmonise.range_to_height_adjust(dat, elevation)
     dat = harmonise.select_preharmonisation_data_vars(dat)
+    dat.attrs = {"production_level": PRODUCT_LEVEL,
+                 "production_version": __version__,
+                 }
     OUTPUT_FILE = harmonise.PRODUCT_FILENAME_TEMPLATE.format(
         product_name=PRODUCT_NAME, product_level=PRODUCT_LEVEL,
         product_version=__version__, system_serial=SYSTEM_SERIAL)

@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 __version__ = 1.34
 l2_versions = {
-    "StreamLine": "1.14",
-    "WLS70": "1.21",
+    "StreamLine": "1.16",
+    "WLS70": "1.22",
     "w400s": "1.32",
 }
 logging.basicConfig(
@@ -45,7 +45,7 @@ paper_doi = "(paper in prep)"
 metadata_doi = "(metadata documentation in prep)"
 
 start_datetime_full = "2022-06-14T00:00:00"
-end_datetime_full = "2024-03-14T00:00:00"
+end_datetime_full = "2024-04-01T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
