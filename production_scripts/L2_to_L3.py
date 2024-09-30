@@ -17,7 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.34
+__version__ = 1.35
 l2_versions = {
     "StreamLine": "1.16",
     "WLS70": "1.22",
@@ -44,8 +44,8 @@ stations_df = pd.json_normalize(stations, sep="_").rename(
 paper_doi = "(paper in prep)"
 metadata_doi = "(metadata documentation in prep)"
 
-start_datetime_full = "2022-06-14T00:00:00"
-end_datetime_full = "2024-04-01T00:00:00"
+start_datetime_full = "2022-06-15T00:00:00"
+end_datetime_full = "2024-04-02T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
@@ -131,7 +131,7 @@ for i in range(0, len(datetime_range)-1):
             if not dat_list:
                 continue
 
-            dat_out = xr.concat(dat_list, dim="station")
+            dat_out = xr.merge(dat_list)
             # add meta data for station dimension (var(station))
             dat_out = dat_out.merge(xr.Dataset.from_dataframe(stations_df))
             dat_out = harmonise.apply_attrs(dat_out, level=3)
