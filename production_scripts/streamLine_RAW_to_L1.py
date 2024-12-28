@@ -318,7 +318,7 @@ for date in dates:
                     "production_date": prod_date,
                     "production_comment": program_summary,
                     "production_author": author,
-                    "production_url": "https://github.com/willmorrison1/halo-reader, https://github.com/willmorrison1/paris-harmonised-dwl/",
+                    "production_url": "https://github.com/actris-cloudnet/halo-reader/tree/winds, https://github.com/willmorrison1/halo-reader, https://github.com/willmorrison1/paris-harmonised-dwl/",
                 }
                 xr_dat.attrs = attrs
 

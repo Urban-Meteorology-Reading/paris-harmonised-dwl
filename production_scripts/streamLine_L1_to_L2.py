@@ -12,7 +12,7 @@ from datetime import datetime as dt
 import harmonise
 import numpy as np
 
-__version__ = "1.16"
+__version__ = "1.17"
 
 # gates lower than INVALID_LOW_RANGE_GATE_M are rejected
 INVALID_LOW_RANGE_GATE_M = 45
@@ -111,7 +111,7 @@ def streamline_harmonise_varnames(dat):
         ("zonal_wind", "u"),
         ("meridional_wind", "v"),
         ("nrays", "n_rays_in_scan"),
-        ("gate_length", "raw_gate_length"),
+        ("gate_range", "raw_gate_length"),
         ("npulses", "n_pulses"),
         ("elevation", "scan_elevation"),
     ]
@@ -120,6 +120,7 @@ def streamline_harmonise_varnames(dat):
         "meridional_wind",
         "nrays",
         "gate_length",
+        "gate_range",
         "npulses",
     ]
 
