@@ -173,8 +173,7 @@ def z_resample(dat, min_z, max_z, res_z, z_name="altitude"):
     if len(height_gate_lengths) > 1:
         raise GateLengthNotIdentical
     dat = dat.sel({z_name: slice(0, max_z + (res_z * 2))})
-    dat = dat.reindex({z_name: np.arange(min_z, max_z, 1)},
-                      method="nearest", tolerance=0.5)
+    dat = dat.reindex({z_name: np.arange(min_z, max_z, 1)}, method="nearest", tolerance=0.5)
     dat = dat.interpolate_na(dim=z_name, max_gap=res_z*2)
     dat = dat.sel({z_name: slice(min_z, max_z, res_z)})
     if "range" in dat.data_vars:

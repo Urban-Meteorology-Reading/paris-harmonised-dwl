@@ -17,7 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.35
+__version__ = 1.36
 l2_versions = {
     "StreamLine": "1.16",
     "WLS70": "1.22",
@@ -126,7 +126,6 @@ for i in range(0, len(datetime_range)-1):
                 dat = harmonise.add_system_id_var(dat, d.instrument_serial.item())
                 dat = dat.expand_dims(dim="station").assign_coords(
                     station=("station", [station_code]))
-                # dat = harmonise.apply_attrs(dat, level=3)
                 dat_list.append(dat.load())
             if not dat_list:
                 continue
