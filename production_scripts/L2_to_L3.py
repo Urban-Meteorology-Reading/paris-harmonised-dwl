@@ -17,7 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.36
+__version__ = 1.37
 l2_versions = {
     "StreamLine": "1.17",
     "WLS70": "1.22",
