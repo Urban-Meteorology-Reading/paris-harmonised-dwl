@@ -44,7 +44,7 @@ stations_df = pd.json_normalize(stations, sep="_").rename(
 paper_doi = "(paper in prep)"
 metadata_doi = "(metadata documentation in prep)"
 
-start_datetime_full = "2022-06-15T00:00:00"
+start_datetime_full = "2023-07-11T00:00:00"
 end_datetime_full = "2024-04-02T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
