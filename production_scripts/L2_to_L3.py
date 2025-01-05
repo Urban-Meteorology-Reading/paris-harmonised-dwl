@@ -17,14 +17,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.37
+__version__ = 1.38
 l2_versions = {
     "StreamLine": "1.17",
     "WLS70": "1.22",
     "w400s": "1.32",
 }
 logging.basicConfig(
-    filename=f"C:/Users/willm/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
+    filename=f"C:/Users/wmorris2/Desktop/L2_to_L3_logs/{dt.datetime.utcnow().strftime('%Y%m%d%H%M%S')}.log",
     filemode='a',
     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
     datefmt='%H:%M:%S',

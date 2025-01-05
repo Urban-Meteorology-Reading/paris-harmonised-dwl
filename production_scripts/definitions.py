@@ -9,6 +9,10 @@ L1_BASEDIR = "D:/Urbisphere/sandbox/data/L1/by-serialnr/France/Paris/"
 L2_BASEDIR = "D:/Urbisphere/sandbox/data/L2/by-serialnr/France/Paris/"
 L3_BASEDIR = "D:/urbisphere/sandbox/data/L3/by-instrumentmodel/DWL/"
 
+L1_BASEDIR = "C:/Users/wmorris2/data/urbisphere/sandbox/data/L1/by-serialnr/France/Paris/"
+L2_BASEDIR = "C:/Users/wmorris2/data/urbisphere/sandbox/data/L2/by-serialnr/France/Paris/"
+L3_BASEDIR = "C:/Users/wmorris2/data/urbisphere/sandbox/data/L3/by-instrumentmodel/DWL/"
+
 # some label defs
 WS_UNITS = "m.s^-1"
 UNITLESS_UNITS = "unitless"
