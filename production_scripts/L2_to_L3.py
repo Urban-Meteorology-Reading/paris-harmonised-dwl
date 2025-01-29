@@ -17,7 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.38
+__version__ = 1.39
 l2_versions = {
     "StreamLine": "1.17",
     "WLS70": "1.22",
@@ -33,7 +33,7 @@ logging.basicConfig(
 logging.info(f"L2_to_L3.py program version {__version__}")
 
 product_name = "paris_dwl_L3"
-time_aggs = [60*10]
+time_aggs = [60*10, 60*60] # seconds
 input_dir = harmonise.L2_BASEDIR
 deployments = harmonise.get_deployments()
 deployments_df = pd.json_normalize(deployments, sep="_")
@@ -43,9 +43,9 @@ stations_df = pd.json_normalize(stations, sep="_").rename(
     columns={"station_code": "station"}).set_index("station")
 paper_doi = "(paper in prep)"
 metadata_doi = "(metadata documentation in prep)"
-
-start_datetime_full = "2023-07-11T00:00:00"
-end_datetime_full = "2024-04-02T00:00:00"
+data_doi = "10.5281/zenodo.14761504"
+start_datetime_full = "2022-06-01T00:00:00"
+end_datetime_full = "2025-04-02T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
@@ -138,13 +138,15 @@ for i in range(0, len(datetime_range)-1):
                 time_window_s=time_agg)
 
             attrs = {
-                "title": "Harmonised boundary layer wind profile dataset from six ground-based doppler wind lidars across Paris, France",
+                "title": "Harmonised boundary layer wind profile dataset from six ground-based doppler wind lidars in a transectacross Paris, France",
                 "creator_name": "William Morrison (william.morrison@meteo.uni-freiburg.de, williamtjmorrison@gmail.com)",
                 "creator_institution": "Environmental Meteorology, Institute of Earth and Environmental Sciences, Faculty of Environment and Natural Resources, University of Freiburg, Freiburg, 79085, Germany",
                 "principal_investigator": "Andreas Christen (andreas.christen@meteo.uni-freiburg.de)",
-                "metadata_doi": f"paper: {paper_doi}. metadata: {metadata_doi}",
+                "paper_doi": f"{paper_doi}",
+                "metadata_doi": f"{metadata_doi}",
+                "data_doi": f"{data_doi}",
                 "processing_level": "L3",
-                "processing_level_description": f"Level 3 (L3): Raw observed data files are converted to L1. QAQC applied at L2. Individual files combined and harmonised at L3. Consult corresponding paper {paper_doi} for details.",
+                "processing_level_description": f"Level 3 (L3): Raw observed data files are converted to L1. QAQC applied at L2. Individual files combined and harmonised at L3.",
                 "processing_name": "L2_to_L3.py",
                 "processing_version_L3": str(__version__),
                 "processing_version_L2": str(l2_versions),
