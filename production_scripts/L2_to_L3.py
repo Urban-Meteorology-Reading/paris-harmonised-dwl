@@ -44,8 +44,8 @@ stations_df = pd.json_normalize(stations, sep="_").rename(
 paper_doi = "(paper in prep)"
 metadata_doi = "(metadata documentation in prep)"
 data_doi = "10.5281/zenodo.14761504"
-start_datetime_full = "2022-06-01T00:00:00"
-end_datetime_full = "2025-04-02T00:00:00"
+start_datetime_full = "2022-12-07T00:00:00"
+end_datetime_full = "2022-12-08T00:00:00"
 file_freq = "24h"
 datetime_range = pd.date_range(
     start_datetime_full, end_datetime_full, freq=file_freq)
@@ -68,10 +68,11 @@ for i in range(0, len(datetime_range)-1):
                 ]
 
                 if d.shape[0] > 1:
-                    logging.error(
-                        "Figure out how to handle concurrent station deployments")
-                    raise ValueError(
-                        "Figure out how to handle concurrent station deployments")
+                    logging.warning(
+                        "Concurrent station deployments")
+                    # raise ValueError(
+                    #     "Figure out how to handle concurrent station deployments")
+                    d = d[:1]
 
                 if d.shape[0] == 0:
                     logging.debug(
