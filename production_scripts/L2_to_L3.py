@@ -17,7 +17,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-__version__ = 1.39
+__version__ = 1.40
 l2_versions = {
     "StreamLine": "1.17",
     "WLS70": "1.22",
@@ -72,7 +72,7 @@ for i in range(0, len(datetime_range)-1):
                         "Concurrent station deployments")
                     # raise ValueError(
                     #     "Figure out how to handle concurrent station deployments")
-                    d = d[:1]
+                    d = d[1:2]
 
                 if d.shape[0] == 0:
                     logging.debug(
